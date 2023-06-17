@@ -1,11 +1,10 @@
 # Get the absolute path of the parent directory of the script
 $scriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-$sourceDirectory = Join-Path -Path $scriptPath -ChildPath "..\"
 
 # Define the array of accepted OS flags
 $acceptedFlags = @(
-    '--ubuntu-20.04',
-    '--ubuntu-22.04'
+    'Ubuntu-20.04',
+    'Ubuntu-22.04'
 )
 
 # Define the array of items to copy
@@ -32,18 +31,8 @@ if ($osFlag -notin $acceptedFlags) {
     return
 }
 
-# Determine the distribution name based on the OS flag
-$wslDistribution = ''
-switch ($osFlag) {
-    { $_ -eq $acceptedFlags[0] } {
-        $wslDistribution = 'Ubuntu-20.04'
-        break
-    }
-    { $_ -eq $acceptedFlags[1] } {
-        $wslDistribution = 'Ubuntu-22.04'
-        break
-    }
-}
+# If osFlag is in acceptedFlags, then set wslDistribution to accepted flag
+$wslDistribution = $osFlag
 
 # Set the destination path based on the WSL distribution
 $destinationPath = "\\wsl$\$wslDistribution\tmp\MyBuntu"
@@ -55,7 +44,7 @@ if (!(Test-Path -Path $destinationPath -PathType Container)) {
 
 # Copy each item from the source to the destination
 foreach ($item in $itemsToCopy) {
-    $itemPath = Join-Path -Path $sourceDirectory -ChildPath $item
+    $itemPath = Join-Path -Path $scriptPath -ChildPath $item
     $destinationItemPath = Join-Path -Path $destinationPath -ChildPath $item
 
     # Check if the item already exists in the destination and prompt for confirmation
