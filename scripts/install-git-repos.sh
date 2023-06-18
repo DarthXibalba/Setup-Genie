@@ -9,13 +9,22 @@ display_usage() {
 parse_gitconfig() {
     local config_file=$1
     local config_section=$2
+
+    local pat_key="PAT"
+    local localpath_key="LOCALPATH"
     local required_key="REQUIRED"
     local optional_key="OPTIONAL"
 
-    # Read the required repositories
-    readarray -t required_repos < <(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${required_key}\[]/{print \$2}" "$config_file" | awk '{$1=$1};1')
+    # Read PAT and LOCALPATH values
+    pat=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${pat_key}/{print \$2}" "$config_file" | awk '{$1=$1};1')
+    localpath=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${localpath_key}/{print \$2}" "$config_file" | awk '{$1=$1};1')
 
-    # Read the optional repositories
+    # Remove leading and trailing double quotes from values
+    pat=$(sed 's/^"\(.*\)"$/\1/' <<< "$pat")
+    localpath=$(eval "echo $(sed 's/^"\(.*\)"$/\1/' <<< "$localpath")")
+
+    # Read the repositories
+    readarray -t required_repos < <(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${required_key}\[]/{print \$2}" "$config_file" | awk '{$1=$1};1')
     readarray -t optional_repos < <(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${optional_key}\[]/{print \$2}" "$config_file" | awk '{$1=$1};1')
 
     # Remove leading and trailing double quotes from repository URLs
@@ -26,14 +35,6 @@ parse_gitconfig() {
     for ((i=0; i<${#optional_repos[@]}; i++)); do
         optional_repos[i]=$(sed 's/^"\(.*\)"$/\1/' <<< "${optional_repos[i]}")
     done
-
-    # Read LOCALPATH and PAT values
-    localpath=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /LOCALPATH/{print \$2}" "$config_file" | awk '{$1=$1};1')
-    pat=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /PAT/{print \$2}" "$config_file" | awk '{$1=$1};1')
-
-    # Remove leading and trailing double quotes from LOCALPATH and PAT values
-    localpath=$(eval "echo $(sed 's/^"\(.*\)"$/\1/' <<< "$localpath")")
-    pat=$(sed 's/^"\(.*\)"$/\1/' <<< "$pat")
 
     # Parse repository URLs
     parsed_required_repos=()
@@ -56,9 +57,9 @@ parse_gitconfig() {
     done
 
     # Print the parsed values
+    echo "$localpath"
     echo "${parsed_required_repos[@]}"
     echo "${parsed_optional_repos[@]}"
-    echo "$localpath"
 }
 
 # Check if the script is run without any arguments
@@ -112,9 +113,9 @@ if [ $parse_successful -ne 0 ]; then
 fi
 
 # Assign the parsed values
-readarray -t parsed_required_repos <<< "${parse_result[0]}"
-readarray -t parsed_optional_repos <<< "${parse_result[1]}"
-localpath="${parse_result[2]}"
+localpath="${parse_result[0]}"
+readarray -t parsed_required_repos <<< "${parse_result[1]}"
+readarray -t parsed_optional_repos <<< "${parse_result[2]}"
 
 # Check if the localpath directory exists, create it if not
 if [ ! -d "$localpath" ]; then
