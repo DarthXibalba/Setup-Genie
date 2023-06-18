@@ -35,6 +35,7 @@ if ($osFlag -notin $acceptedFlags) {
 $wslDistribution = $osFlag
 
 # Set the destination path based on the WSL distribution
+$destinationLinuxPath = "/tmp/MyBuntu/"
 $destinationPath = "\\wsl$\$wslDistribution\tmp\MyBuntu"
 
 # Create the destination directory if it doesn't exist
@@ -60,6 +61,16 @@ foreach ($item in $itemsToCopy) {
     # Copy the item to the destination
     Copy-Item -Path $itemPath -Destination $destinationItemPath -Recurse
 }
+Write-Host "Files copied to WSL environment '$wslDistribution' at '$destinationPath'."
+
+# Set executable permissions for the setup.sh file
+$setupShPath = $destinationLinuxPath + "setup.sh"
+wsl -d $wslDistribution --cd / --user root --exec sh -c "chmod +x $setupShPath"
+
+# Set executable permissions for all *.sh files in the /scripts/ directory
+$scripts = $destinationLinuxPath + "scripts/*.sh"
+$cmd = "chmod +x $scripts"
+wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
 
 # Output a message indicating the successful copy operation
-Write-Host "Files copied to WSL environment '$wslDistribution' at '$destinationPath'."
+Write-Host "Set correct file permissions."
