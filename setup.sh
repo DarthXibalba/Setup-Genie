@@ -2,7 +2,7 @@
 
 # Function to display script usage
 display_usage() {
-    echo "Usage: $0 <config_file>"
+    echo "Usage: $0 <config_file> [<section>...]"
 }
 
 # Read config values from INI file
@@ -24,58 +24,47 @@ fi
 
 config_file=$1
 
-# Set default values
-ENVIRONMENT=""
-ENV_TYPE=""
-PERSONAL_ACCESS_TOKEN=""
-
-# Read config values from the INI file
-ENVIRONMENT=$(read_config "$config_file" "settings" "ENVIRONMENT")
-ENV_TYPE=$(read_config "$config_file" "settings" "ENV_TYPE")
-
-# Check if both environment and environment type are set
-if [ -z "${ENVIRONMENT}" ] || [ -z "${ENV_TYPE}" ]; then
-    echo "Error! Must specify both environment and environment type in the config file!"
+# Check if sections are provided
+if [ $# -lt 2 ]; then
+    echo "Error! No sections specified!"
     display_usage
     exit 1
 fi
 
-# Update environment-specific configurations
-if [ "$ENVIRONMENT" = "wsl" ]; then
-    # Run WSL-specific commands
-    echo "Setting up for WSL Ubuntu..."
-    # ...
-elif [ "$ENVIRONMENT" = "ubuntu" ]; then
-    # Run Ubuntu-specific commands
-    echo "Setting up for Ubuntu..."
-    # ...
-else
-    echo "Error! Invalid environment: $ENVIRONMENT"
-    display_usage
-    exit 1
-fi
+# Read config values from the INI file for each section
+for ((i = 2; i <= $#; i++)); do
+    section="${!i}"
+    required_scripts=($(read_config "$config_file" "$section" "REQUIRED[]"))
+    optional_scripts=($(read_config "$config_file" "$section" "OPTIONAL[]"))
 
-# Update environment-specific configurations
-if [ "$ENV_TYPE" = "work" ]; then
-    # Run Work-specific commands
-    echo "Setting up for work use..."
-    # ...
-elif [ "$ENV_TYPE" = "personal" ]; then
-    # Run Personal-specific commands
-    echo "Setting up for personal use with personal access token: $PERSONAL_ACCESS_TOKEN"
-    # ...
-else
-    echo "Error! Invalid environment: $ENV_TYPE"
-    display_usage
-    exit 1
-fi
+    # Check if required scripts are defined
+    if [ ${#required_scripts[@]} -eq 0 ]; then
+        echo "Error! No required scripts defined for section: $section"
+        display_usage
+        exit 1
+    fi
 
-# Read personal access token from file
-pat_file="pat.ini"
-if [ ! -f "$pat_file" ]; then
-    echo "Error! Personal access token file not found: $pat_file"
-    display_usage
-    exit 1
-fi
+    echo "Running scripts for section: $section"
 
-PERSONAL_ACCESS_TOKEN=$(cat "$pat_file")
+    # Run the required scripts
+    for script in "${required_scripts[@]}"; do
+        echo "Running script: $script"
+        # Execute the script here
+        bash "$script"
+    done
+
+    # Prompt to execute optional scripts
+    read -rp "Do you want to run the optional scripts? (Y/N): " choice
+    if [[ $choice =~ ^[Yy]$ ]]; then
+        # Run the optional scripts
+        for script in "${optional_scripts[@]}"; do
+            echo "Running optional script: $script"
+            # Execute the script here
+            bash "$script"
+        done
+    else
+        echo "Skipping optional scripts."
+    fi
+
+    echo "Finished running scripts for section: $section"
+done
