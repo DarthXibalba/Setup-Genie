@@ -46,7 +46,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Read the config file
-config_file="gitconfig.ini"
+config_file="./config/gitconfig.ini"
 
 # Check if the config file exists
 if [ ! -f "$config_file" ]; then

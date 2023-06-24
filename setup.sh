@@ -5,14 +5,13 @@ display_usage() {
     echo "Usage: $0 <config_file> [<section>...]"
 }
 
-# Read config values from INI file
+# Read config values from JSON file
 read_config() {
-    local ini_file=$1
+    local json_file=$1
     local section=$2
     local key=$3
 
-    # Use awk to parse the INI file
-    awk -F '=' -v section="$section" -v key="$key" '$1 == "[" section "]" { in_section = 1; next } in_section && $1 == key { print $2; exit }' "$ini_file"
+    jq -r ".$section.$key[]" "$json_file"
 }
 
 # Check if a config file is provided
@@ -31,11 +30,11 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
-# Read config values from the INI file for each section
+# Read config values from the JSON file for each section
 for ((i = 2; i <= $#; i++)); do
     section="${!i}"
-    required_scripts=($(read_config "$config_file" "$section" "REQUIRED[]"))
-    optional_scripts=($(read_config "$config_file" "$section" "OPTIONAL[]"))
+    required_scripts=($(read_config "$config_file" "$section" "REQUIRED"))
+    optional_scripts=($(read_config "$config_file" "$section" "OPTIONAL"))
 
     # Check if required scripts are defined
     if [ ${#required_scripts[@]} -eq 0 ]; then
@@ -51,20 +50,21 @@ for ((i = 2; i <= $#; i++)); do
         echo "Running script: $script"
         # Execute the script here
         bash "$script"
+        echo "Finished running script: $script"
     done
 
-    # Prompt to execute optional scripts
-    read -rp "Do you want to run the optional scripts? (Y/N): " choice
-    if [[ $choice =~ ^[Yy]$ ]]; then
-        # Run the optional scripts
-        for script in "${optional_scripts[@]}"; do
+    # Run the optional scripts
+    for script in "${optional_scripts[@]}"; do
+        # Prompt to execute script
+        read -rp "Do you want to run '$script'? (Y/N): " choice
+        if [[ $choice =~ ^[Yy]$ ]]; then
             echo "Running optional script: $script"
-            # Execute the script here
             bash "$script"
-        done
-    else
-        echo "Skipping optional scripts."
-    fi
+            echo "Finished running optional script: $script"
+        else
+            echo "Skipping optional script: $script"
+        fi
+    done
 
     echo "Finished running scripts for section: $section"
 done
