@@ -1,0 +1,41 @@
+{
+    "personal": {
+      "USERNAME": "Personal User",
+      "EMAIL": "personal@email.com",
+      "PAT": "ghp_abcdefghijklmnopqrstuvwxyz0123456789",
+      "LOCALPATH": "$HOME/personal_dev/",
+      "REQUIRED": [
+        "github.com/Username/personal1.git",
+        "github.com/Username/personal2.git",
+        "github.com/Username/personal3.git"
+      ],
+      "OPTIONAL": [
+        "github.com/Username/personal4.git",
+        "github.com/Username/personal5.git"
+      ]
+    },
+    "work": {
+      "USERNAME": "Work User",
+      "EMAIL": "work@email.com",
+      "PAT": "ghp_abcdefghijklmnopqrstuvwxyz0123456789",
+      "LOCALPATH": "$HOME/work_dev/",
+      "REQUIRED": [
+        "github.com/Username/work1.git",
+        "github.com/Username/work2.git"
+      ],
+      "OPTIONAL": [
+        "github.com/Username/work3.git",
+        "github.com/Username/work4.git",
+        "github.com/Username/work5.git"
+      ]
+    },
+    "containerd": {
+      "PAT": "",
+      "LOCALPATH": "$HOME/actual_containerd/",
+      "OPTIONAL": [
+        "github.com/containerd/containerd.git",
+        "github.com/containerd/nerdctl.git"
+      ]
+    }
+  }
+  

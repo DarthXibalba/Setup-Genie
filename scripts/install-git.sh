@@ -12,8 +12,8 @@ read_config_values() {
     local username_key="USERNAME"
     local email_key="EMAIL"
 
-    local username=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${username_key}/{print \$2}" "$config_file" | awk '{$1=$1};1')
-    local email=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${email_key}/{print \$2}" "$config_file" | awk '{$1=$1};1')
+    local username=$(jq -r ".${config_section}.${username_key}" "$config_file")
+    local email=$(jq -r ".${config_section}.${email_key}" "$config_file")
 
     echo "$username $email"
 }
@@ -46,7 +46,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Read the config file
-config_file="./config/gitconfig.ini"
+config_file="./config/gitconfig.json"
 
 # Check if the config file exists
 if [ ! -f "$config_file" ]; then
@@ -99,4 +99,5 @@ if [ -z "${existing_username}" ] || [ -z "${existing_email}" ]; then
     git config --global credential.helper store
     echo "Git configured with username '$username' and email '$email'."
 else
-    echo "Git user.name '$existing_username' and user.email '$existing_email' are already set
+    echo "Git user.name '$existing_username' and user.email '$existing_email' are already set."
+fi
