@@ -12,14 +12,13 @@ display_usage() {
 
 # Declare global variables
 declare config_file="./config/gitconfig.json"
+declare config_section
 declare localpath
 declare -a parsed_required
 declare -a parsed_optional
 
 # Function to parse the gitconfig.json file and return localpath, required repos, and optional repos
 parse_config() {
-    local config_section=$1
-
     local key_localpath="LOCALPATH"
     local key_optional="OPTIONAL"
     local key_required="REQUIRED"
@@ -89,7 +88,7 @@ if [ ! -f "$config_file" ]; then
     exit 1
 fi
 
-parse_config "$config_section"
+parse_config
 
 # Check if the localpath directory exists, create it if not
 if [ ! -d "$localpath" ]; then

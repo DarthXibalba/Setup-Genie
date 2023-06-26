@@ -10,17 +10,19 @@ display_usage() {
     echo "$usage_message"
 }
 
+# Declare the global variables
+declare config_file="./config/gitconfig.json"
+declare config_section
+declare username
+declare email
+
 # Function to read username and email from config file
 read_config_values() {
-    local config_file=$1
-    local config_section=$2
-    local username_key="USERNAME"
-    local email_key="EMAIL"
+    local key_username="USERNAME"
+    local key_email="EMAIL"
 
-    local username=$(jq -r ".${config_section}.${username_key}" "$config_file")
-    local email=$(jq -r ".${config_section}.${email_key}" "$config_file")
-
-    echo "$username $email"
+    username=$(jq -r ".${config_section}.${key_username}" "$config_file")
+    email=$(jq -r ".${config_section}.${key_email}" "$config_file")
 }
 
 # Check if the script is run without any arguments
@@ -29,29 +31,24 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-# Parse input flags
-while [[ $# -gt 0 ]]; do
-    key="$1"
+# Check if more than one flag is provided
+if [ $# -gt 1 ]; then
+    echo "Error! Only one flag can be provided."
+    display_usage
+    exit 1
+fi
 
-    case $key in
-        --personal)
-        config_section="personal"
-        ;;
-        --work)
-        config_section="work"
-        ;;
-        *)
-        # Invalid flag provided
-        display_usage
-        exit 1
-        ;;
-    esac
+# Get the flag from the command-line argument
+flag="$1"
 
-    shift
-done
-
-# Read the config file
-config_file="./config/gitconfig.json"
+# Check if the flag is a valid flag
+if [[ " ${valid_flags[*]} " =~ " ${flag} " ]]; then
+    config_section="$flag"
+else
+    # Invalid flag provided
+    display_usage
+    exit 1
+fi
 
 # Check if the config file exists
 if [ ! -f "$config_file" ]; then
@@ -61,15 +58,7 @@ if [ ! -f "$config_file" ]; then
 fi
 
 # Read the username and email from the config file
-read_result=$(read_config_values "$config_file" "$config_section")
-read_successful=$?
-
-if [ $read_successful -ne 0 ]; then
-    echo "Error! Invalid config file: Missing required values in [$config_section] section."
-    exit 1
-fi
-
-read -r username email <<< "$read_result"
+read_config_values
 
 # Check if username and email are set
 if [ -z "${username}" ]; then
