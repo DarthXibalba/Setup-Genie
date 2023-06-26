@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# Define valid flags
+declare -a valid_flags=("personal" "work")
+
 # Function to display script usage
 display_usage() {
-    echo "Usage: $0 [--personal | --work]"
+    local valid_flags_string="${valid_flags[*]}"
+    local usage_message="Usage: $0 [${valid_flags_string// / | }]"
+    echo "$usage_message"
 }
 
 # Function to read username and email from config file

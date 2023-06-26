@@ -5,7 +5,9 @@ declare -a valid_flags=("personal" "work" "containerd")
 
 # Function to display script usage
 display_usage() {
-    echo "Usage: $0 [personal | work | containerd]"
+    local valid_flags_string="${valid_flags[*]}"
+    local usage_message="Usage: $0 [${valid_flags_string// / | }]"
+    echo "$usage_message"
 }
 
 # Declare global variables
