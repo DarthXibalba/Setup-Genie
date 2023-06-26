@@ -5,6 +5,13 @@ display_usage() {
     echo "Usage: $0 <config_file> [<section>...]"
 }
 
+# Check if jq is installed
+if ! dpkg -s jq >/dev/null 2>&1; then
+    echo "jq is not installed. Installing..."
+    sudo apt-get update
+    sudo apt-get install jq -y
+fi
+
 # Read config values from JSON file
 read_config() {
     local json_file=$1

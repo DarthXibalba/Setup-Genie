@@ -30,8 +30,11 @@
       ]
     },
     "containerd": {
+      "USERNAME": "",
+      "EMAIL": "",
       "PAT": "",
       "LOCALPATH": "$HOME/actual_containerd/",
+      "REQUIRED": [],
       "OPTIONAL": [
         "github.com/containerd/containerd.git",
         "github.com/containerd/nerdctl.git"

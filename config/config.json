@@ -1,37 +1,40 @@
 {
-    "base": {
-      "REQUIRED": [
-        "./scripts/copy-bash-profile.sh",
-        "./scripts/install-vim.sh"
-      ]
-    },
-    "ubuntu": {
-      "REQUIRED": [
-        "./scripts/install-vscode.sh",
-        "./scripts/install-hpds-nvidia.sh"
-      ],
-      "OPTIONAL": [
-        "./scripts/install-rust-desk-client.sh"
-      ]
-    },
-    "wsl": {
-      "REQUIRED": [
-        "./scripts/enable-wsl-systemd.sh"
-      ]
-    },
-    "personal": {
-      "REQUIRED": [
-        "./scripts/install-git.sh personal",
-        "./scripts/install-git-repos.sh personal"
-      ]
-    },
-    "work": {
-      "REQUIRED": [
-        "./scripts/install-git.sh work",
-        "./scripts/install-git-repos.sh work"
-      ],
-      "OPTIONAL": [
-        "./scripts/install-git-repos.sh containerd"
-      ]
-    }
+  "base": {
+    "REQUIRED": [
+      "./scripts/copy-bash-profile.sh",
+      "./scripts/install-vim.sh"
+    ],
+    "OPTIONAL": []
+  },
+  "ubuntu": {
+    "REQUIRED": [
+      "./scripts/install-vscode.sh",
+      "./scripts/install-hpds-nvidia.sh"
+    ],
+    "OPTIONAL": [
+      "./scripts/install-rust-desk-client.sh"
+    ]
+  },
+  "wsl": {
+    "REQUIRED": [
+      "./scripts/enable-wsl-systemd.sh"
+    ],
+    "OPTIONAL": []
+  },
+  "personal": {
+    "REQUIRED": [
+      "./scripts/install-git.sh personal",
+      "./scripts/install-git-repos.sh personal"
+    ],
+    "OPTIONAL": []
+  },
+  "work": {
+    "REQUIRED": [
+      "./scripts/install-git.sh work",
+      "./scripts/install-git-repos.sh work"
+    ],
+    "OPTIONAL": [
+      "./scripts/install-git-repos.sh containerd"
+    ]
   }
+}
