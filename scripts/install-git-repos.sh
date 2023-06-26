@@ -173,4 +173,3 @@ if [ ${#parsed_optional_repos[@]} -ne 0 ]; then
         fi
     done
 fi
-
