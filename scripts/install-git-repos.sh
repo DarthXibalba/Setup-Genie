@@ -1,65 +1,58 @@
 #!/bin/bash
 
+# Define valid flags
+declare -a valid_flags=("personal" "work" "containerd")
+
 # Function to display script usage
 display_usage() {
-    echo "Usage: $0 [--personal | --work | --containerd]"
+    echo "Usage: $0 [personal | work | containerd]"
 }
 
-# Function to parse the gitconfig.ini file
-parse_gitconfig() {
-    local config_file=$1
-    local config_section=$2
+# Declare global variables
+declare config_file="./config/gitconfig.json"
+declare localpath
+declare -a parsed_required
+declare -a parsed_optional
 
-    local pat_key="PAT"
-    local localpath_key="LOCALPATH"
-    local required_key="REQUIRED"
-    local optional_key="OPTIONAL"
+# Function to parse the gitconfig.json file and return localpath, required repos, and optional repos
+parse_config() {
+    local config_section=$1
 
-    # Read PAT and LOCALPATH values
-    pat=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${pat_key}/{print \$2}" "$config_file" | awk '{$1=$1};1')
-    localpath=$(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${localpath_key}/{print \$2}" "$config_file" | awk '{$1=$1};1')
+    local key_localpath="LOCALPATH"
+    local key_optional="OPTIONAL"
+    local key_required="REQUIRED"
+    local key_pat="PAT"
 
-    # Remove leading and trailing double quotes from values
-    pat=$(sed 's/^"\(.*\)"$/\1/' <<< "$pat")
+    # Read the localpath value
+    localpath=$(jq -r ".${config_section}.${key_localpath}" "$config_file")
+    # Remove leading and trailing double quotes from value
     localpath=$(eval "echo $(sed 's/^"\(.*\)"$/\1/' <<< "$localpath")")
 
-    # Read the repositories
-    readarray -t required_repos < <(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${required_key}\[]/{print \$2}" "$config_file" | awk '{$1=$1};1')
-    readarray -t optional_repos < <(awk -F "=" "/\[${config_section}\]/{flag=1; next} /\[/{flag=0} flag && /${optional_key}\[]/{print \$2}" "$config_file" | awk '{$1=$1};1')
+    # Read the PAT value
+    local pat=$(jq -r ".${config_section}.${key_pat}" "$config_file")
 
-    # Remove leading and trailing double quotes from repository URLs
-    for ((i=0; i<${#required_repos[@]}; i++)); do
-        required_repos[i]=$(sed 's/^"\(.*\)"$/\1/' <<< "${required_repos[i]}")
-    done
-
-    for ((i=0; i<${#optional_repos[@]}; i++)); do
-        optional_repos[i]=$(sed 's/^"\(.*\)"$/\1/' <<< "${optional_repos[i]}")
-    done
+    # Read the required and optional repositories into their respective arrays
+    local reqs
+    local opts
+    readarray -t reqs < <(jq -r ".${config_section}.${key_required}[]" "$config_file")
+    readarray -t opts < <(jq -r ".${config_section}.${key_optional}[]" "$config_file")
 
     # Parse repository URLs
-    parsed_required_repos=()
-    parsed_optional_repos=()
-
-    for repo in "${required_repos[@]}"; do
+    for repo in "${reqs[@]}"; do
         if [ -z "$pat" ]; then
-            parsed_required_repos+=("https://${repo}")
+            parsed_required+=("https://${repo}")
         else
-            parsed_required_repos+=("https://${pat}@${repo}")
+            parsed_required+=("https://${pat}@${repo}")
         fi
     done
 
-    for repo in "${optional_repos[@]}"; do
+    for repo in "${opts[@]}"; do
         if [ -z "$pat" ]; then
-            parsed_optional_repos+=("https://${repo}")
+            parsed_optional+=("https://${repo}")
         else
-            parsed_optional_repos+=("https://${pat}@${repo}")
+            parsed_optional+=("https://${pat}@${repo}")
         fi
     done
-
-    # Print the parsed values
-    echo "$localpath"
-    echo "${parsed_required_repos[@]}"
-    echo "${parsed_optional_repos[@]}"
 }
 
 # Check if the script is run without any arguments
@@ -68,32 +61,24 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-# Parse input flags
-while [[ $# -gt 0 ]]; do
-    key="$1"
+# Check if more than one flag is provided
+if [ $# -gt 1 ]; then
+    echo "Error! Only one flag can be provided."
+    display_usage
+    exit 1
+fi
 
-    case $key in
-        --personal)
-        config_section="personal"
-        ;;
-        --work)
-        config_section="work"
-        ;;
-        --containerd)
-        config_section="containerd"
-        ;;
-        *)
-        # Invalid flag provided
-        display_usage
-        exit 1
-        ;;
-    esac
+# Get the flag from the command-line argument
+flag="$1"
 
-    shift
-done
-
-# Read the config file
-config_file="gitconfig.ini"
+# Check if the flag is a valid flag
+if [[ " ${valid_flags[*]} " =~ " ${flag} " ]]; then
+    config_section="$flag"
+else
+    # Invalid flag provided
+    display_usage
+    exit 1
+fi
 
 # Check if the config file exists
 if [ ! -f "$config_file" ]; then
@@ -102,20 +87,7 @@ if [ ! -f "$config_file" ]; then
     exit 1
 fi
 
-# Parse the gitconfig.ini file
-parse_result=$(parse_gitconfig "$config_file" "$config_section")
-parse_successful=$?
-
-# Check if parsing was successful
-if [ $parse_successful -ne 0 ]; then
-    echo "Error! Failed to parse gitconfig.ini file."
-    exit 1
-fi
-
-# Assign the parsed values
-localpath="${parse_result[0]}"
-readarray -t parsed_required_repos <<< "${parse_result[1]}"
-readarray -t parsed_optional_repos <<< "${parse_result[2]}"
+parse_config "$config_section"
 
 # Check if the localpath directory exists, create it if not
 if [ ! -d "$localpath" ]; then
@@ -125,42 +97,36 @@ if [ ! -d "$localpath" ]; then
     fi
 fi
 
-# Change to the specified localpath directory
-if ! cd "$localpath"; then
-    echo "Error! Failed to change directory to $localpath"
-    exit 1
-fi
-
 # Check if required repositories exist and clone them
-if [ ${#parsed_required_repos[@]} -ne 0 ]; then
-    for repo in "${parsed_required_repos[@]}"; do
+if [ ${#parsed_required[@]} -ne 0 ]; then
+    for repo in "${parsed_required[@]}"; do
         repo_name=$(basename "$repo" .git)
-        if [ -d "$repo_name" ]; then
+        if [ -d "$localpath$repo_name" ]; then
             echo "Repository $repo_name already exists. Skipping cloning."
         else
-            git clone "$repo" "$localpath/$repo_name"
+            echo "git clone '$repo' '$localpath$repo_name'"
+            git clone "$repo" "$localpath$repo_name"
         fi
     done
 fi
 
-# Check if optional repositories exist and prompt for installation
-if [ ${#parsed_optional_repos[@]} -ne 0 ]; then
-    # Prompt user for optional repositories installation
-    for repo in "${parsed_optional_repos[@]}"; do
+# Check if required repositories exist and clone them
+if [ ${#parsed_optional[@]} -ne 0 ]; then
+    for repo in "${parsed_optional[@]}"; do
         repo_name=$(basename "$repo" .git)
-        if [ -d "$repo_name" ]; then
+        if [ -d "$localpath$repo_name" ]; then
             echo "Repository $repo_name already exists. Skipping cloning."
         else
             read -p "Do you want to install the repository $repo? [Y/N]: " choice
             case $choice in
                 [Yy]*)
-                    git clone "$repo" "$localpath/$repo_name"
+                    echo "git clone '$repo' '$localpath$repo_name'"
+                    git clone "$repo" "$localpath$repo_name"
                     ;;
                 *)
-                    echo "Skipping installation of optional repository $repo."
+                    echo "Skipping installation of optional repository."
                     ;;
             esac
         fi
     done
 fi
-
