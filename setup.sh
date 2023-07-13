@@ -19,6 +19,7 @@ read_config() {
     local key=$3
 
     jq -r ".$section.$key[]" "$json_file"
+    ##jq -r ".$section.$key[]" "$json_file" | jq -r '.[]'
 }
 
 # Check if a config file is provided
@@ -57,6 +58,11 @@ for ((i = 2; i <= $#; i++)); do
         echo "Running script: $script"
         # Execute the script here
         bash "$script"
+        ##if [[ "$script" == *'"'* ]]; then
+        ##    eval "$script"
+        ##else
+        ##    eval "$script \"$section\""
+        ##fi
         echo "Finished running script: $script"
     done
 
@@ -67,6 +73,11 @@ for ((i = 2; i <= $#; i++)); do
         if [[ $choice =~ ^[Yy]$ ]]; then
             echo "Running optional script: $script"
             bash "$script"
+            ##if [[ "$script" == *'"'* ]]; then
+            ##    eval "$script"
+            ##else
+            ##    eval "$script \"$section\""
+            ##fi
             echo "Finished running optional script: $script"
         else
             echo "Skipping optional script: $script"
