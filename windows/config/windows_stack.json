@@ -1,0 +1,11 @@
+{
+    "REQUIRED": [
+        "Git.Git",
+        "Google.Chrome",
+        "GoLang.Go",
+        "Microsoft.VisualStudioCode"
+    ],
+    "OPTIONAL": [
+        "Microsoft.Teams"
+    ]
+}
