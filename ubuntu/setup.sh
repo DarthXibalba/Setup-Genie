@@ -56,36 +56,35 @@ for ((i = 2; i <= $#; i++)); do
 
     echo "Running scripts for section: $section"
 
-    # Run the required scripts
-    for script in "${required_scripts[@]}"; do
-        echo "Running script: $script"
-        # Execute the script here
-        bash "$script"
-        ##if [[ "$script" == *'"'* ]]; then
-        ##    eval "$script"
-        ##else
-        ##    eval "$script \"$section\""
-        ##fi
-        echo "Finished running script: $script"
-    done
+# Run the required scripts
+for script in "${required_scripts[@]}"; do
+    # Convert '@' to whitespace in the script content
+    converted_script=${script//@/ }
+    # Run the script
+    echo "Running script: $converted_script"
+    bash -c "$converted_script"
+    echo "Finished running script: $converted_script"
+    echo ""
+done
+
 
     # Run the optional scripts
     for script in "${optional_scripts[@]}"; do
+        # Convert '@' to whitespace in the script content
+        converted_script=${script//@/ }
         # Prompt to execute script
-        read -rp "Do you want to run '$script'? (Y/N): " choice
+        read -rp "Do you want to run '$converted_script'? (Y/N): " choice
         if [[ $choice =~ ^[Yy]$ ]]; then
-            echo "Running optional script: $script"
+            echo "Running optional script: $converted_script"
             bash "$script"
-            ##if [[ "$script" == *'"'* ]]; then
-            ##    eval "$script"
-            ##else
-            ##    eval "$script \"$section\""
-            ##fi
-            echo "Finished running optional script: $script"
+            echo "Finished running optional script: $converted_script"
+            echo ""
         else
-            echo "Skipping optional script: $script"
+            echo "Skipping optional script: $converted_script"
+            echo ""
         fi
     done
 
     echo "Finished running scripts for section: $section"
+    echo ""
 done

@@ -25,18 +25,18 @@
   },
   "personal": {
     "REQUIRED": [
-      "./scripts/install-git.sh personal",
-      "./scripts/install-git-repos.sh personal"
+      "./scripts/install-git.sh@personal",
+      "./scripts/install-git-repos.sh@personal"
     ],
     "OPTIONAL": []
   },
   "work": {
     "REQUIRED": [
-      "./scripts/install-git.sh work",
-      "./scripts/install-git-repos.sh work"
+      "./scripts/install-git.sh@work",
+      "./scripts/install-git-repos.sh@work"
     ],
     "OPTIONAL": [
-      "./scripts/install-git-repos.sh containerd"
+      "./scripts/install-git-repos.sh@containerd"
     ]
   }
 }
