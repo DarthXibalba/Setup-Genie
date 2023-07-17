@@ -19,7 +19,7 @@
   },
   "wsl": {
     "REQUIRED": [
-      "./scripts/enable-wsl-systemd.sh"
+      "./scripts/wsl-enable-systemd.sh"
     ],
     "OPTIONAL": []
   },

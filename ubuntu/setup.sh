@@ -38,6 +38,9 @@ if [ $# -lt 2 ]; then
     exit 1
 fi
 
+# Change directory to where this script resides
+cd "$(dirname "$0")"
+
 # Read config values from the JSON file for each section
 for ((i = 2; i <= $#; i++)); do
     section="${!i}"
