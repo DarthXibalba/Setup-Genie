@@ -3,3 +3,4 @@
 gitconfig.json
 
 *.deb
+*.log

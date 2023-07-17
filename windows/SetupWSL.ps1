@@ -17,13 +17,13 @@ $scriptName = $MyInvocation.MyCommand.Name
 Write-Verbose "Launching script: $scriptName"
 Write-Verbose "Starting location: $LogPath"
 
-function Install-HPDS-WSL2 {
+function Install-WSL2 {
     Write-Verbose "$(Get-Date): Installing WSL2..."
     wsl --install -d $distro
     Write-Verbose "$(Get-Date): Installed WSL2!"
 }
 
-function Resync-HPDS-Windows-Time {
+function Resync-Windows-Time {
     Write-Verbose "$(Get-Date): Re-Synchronizing Windows Time..."
     net stop w32time
     w32tm /unregister
@@ -33,7 +33,7 @@ function Resync-HPDS-Windows-Time {
     Write-Verbose "$(Get-Date): Re-Sync done!"
 }
 
-function Set-HPDS-WSL2-Defaults {
+function Set-WSL2-Defaults {
     Write-Verbose "$(Get-Date): Setting Defaults for WSL2..."
     wsl --set-default-version 2
     wsl --setdefault $distro
@@ -41,13 +41,13 @@ function Set-HPDS-WSL2-Defaults {
     Write-Verbose "$(Get-Date): Set Defaults for WSL2!"
 }
 
-function Unregister-HPDS-Distro {
+function Unregister-Distro {
     Write-Verbose "$(Get-Date): Unregistering distro: $distro"
     wsl --unregister $distro
     Write-Verbose "$(Get-Date): Unregistered distro!"
 }
 
-function Update-HPDS-WSL {
+function Update-WSL {
     Write-Verbose "$(Get-Date): Updating WSL!"
     wsl --update
     Write-Verbose "$(Get-Date): Updated WSL!"
@@ -55,15 +55,15 @@ function Update-HPDS-WSL {
 
 # Main
 if ($InstallWSL2) {
-    Resync-HPDS-Windows-Time
-    Install-HPDS-WSL2
+    Resync-Windows-Time
+    Install-WSL2
 }
 if ($SetDefaults) {
-    Set-HPDS-WSL2-Defaults
+    Set-WSL2-Defaults
 }
 if ($Unregister) {
-    Unregister-HPDS-Distro
+    Unregister-Distro
 }
 if ($UpdateWSL) {
-    Update-HPDS-WSL
+    Update-WSL
 }
