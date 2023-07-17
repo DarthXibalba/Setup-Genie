@@ -1,5 +1,7 @@
 # Get the absolute path of the parent directory of the script
 $scriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
+$topLevelPath = Split-Path -Parent -Path $scriptPath
+$ubuntuPath = Join-Path -Path $topLevelPath -ChildPath "ubuntu"
 
 # Define the array of accepted OS flags
 $acceptedFlags = @(
@@ -45,7 +47,7 @@ if (!(Test-Path -Path $destinationPath -PathType Container)) {
 
 # Copy each item from the source to the destination
 foreach ($item in $itemsToCopy) {
-    $itemPath = Join-Path -Path $scriptPath -ChildPath $item
+    $itemPath = Join-Path -Path $ubuntuPath -ChildPath $item
     $destinationItemPath = Join-Path -Path $destinationPath -ChildPath $item
 
     # Check if the item already exists in the destination and prompt for confirmation
