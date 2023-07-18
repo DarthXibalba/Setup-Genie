@@ -6,6 +6,7 @@
         "Microsoft.VisualStudioCode"
     ],
     "OPTIONAL": [
-        "Microsoft.Teams"
+        "Microsoft.Teams",
+        "RustDesk.RustDesk"
     ]
 }

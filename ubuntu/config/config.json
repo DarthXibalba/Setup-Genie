@@ -2,10 +2,13 @@
   "base": {
     "REQUIRED": [
       "./scripts/copy-bash-profile.sh",
+      "./scripts/install-build-essential.sh",
+      "./scripts/install-curl.sh",
       "./scripts/install-vim.sh"
     ],
     "OPTIONAL": [
-      "./scripts/install-golang.sh"
+      "./scripts/install-golang.sh",
+      "./scripts/install-golangci-lint.sh"
     ]
   },
   "ubuntu": {

@@ -29,7 +29,7 @@ foreach ($requiredItem in $required) {
 # Iterate over optional values and prompt the user for confirmation
 foreach ($optionalItem in $optional) {
     if (!(IsPackageInstalled $optionalItem)) {
-        $installOptional = Read-Host "Do you want to install the optional item: $optionalItem? (Y/N)"
+        $installOptional = Read-Host "Do you want to install the optional item: $optionalItem ? (Y/N)"
         if ($installOptional -eq "Y" -or $installOptional -eq "y") {
             Write-Host "Installing optional item: $optionalItem"
             winget install -e --id $optionalItem --silent --accept-package-agreements --accept-source-agreements
