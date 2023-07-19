@@ -7,6 +7,7 @@
     ],
     "OPTIONAL": [
         "Microsoft.Teams",
-        "RustDesk.RustDesk"
+        "RustDesk.RustDesk",
+        "Zoom.Zoom"
     ]
 }
