@@ -1,6 +1,10 @@
-*secrets*
-
-gitconfig.json
-
+# Installer binaries
 *.deb
+*.exe
+
+# Log
 *.log
+
+# Secrets
+*secrets*
+gitconfig.json
