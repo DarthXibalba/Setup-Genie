@@ -12,4 +12,4 @@ if [ ! -f "$rustPath" ]; then
 fi
 
 # Install the RustDesk Software
-sudo apt-get install $rustPath -y
+$script_dir"/apt-get-install.sh" $rustPath

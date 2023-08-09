@@ -1,4 +1,6 @@
 #!/bin/bash
+# Get the absolute path of the script directory
+script_dir="$(dirname "$(realpath "$0")")"
 
 # Define valid flags
 declare -a valid_flags=("personal" "work")
@@ -72,12 +74,7 @@ if [ -z "${email}" ]; then
 fi
 
 # Install Git if not already installed
-if ! command -v git &>/dev/null; then
-    if ! sudo apt-get install -y git; then
-        echo "Error! Failed to install Git. Please check your internet connection and try again."
-        exit 1
-    fi
-fi
+$script_dir"/apt-get-install.sh" git
 
 # Check if user.name and user.email are already set
 existing_username=$(git config --global --get user.name)

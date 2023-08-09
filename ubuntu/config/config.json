@@ -3,8 +3,8 @@
     "REQUIRED": [
       "./scripts/copy-bash-profile.sh",
       "./scripts/install-build-essential.sh",
-      "./scripts/install-curl.sh",
-      "./scripts/install-vim.sh"
+      "./scripts/install-vim.sh",
+      "./scripts/install-web-fetchers.sh"
     ],
     "OPTIONAL": [
       "./scripts/install-golang.sh",
