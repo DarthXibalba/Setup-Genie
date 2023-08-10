@@ -1,0 +1,22 @@
+alias showCondaAliases='cat ~/.miniconda_aliases'
+
+alias condaVersion='conda --v'
+echo "Used to get conda version"
+
+alias condaCreate='conda create -n'
+echo "Used to create conda environment:"
+echo "$ condaCreate {envName} python"
+
+alias condaActivate='conda activate'
+echo "Used to activate a conda environment:"
+echo "$ condaActivate {envName}"
+
+alias condaDeactivate='conda deactivate'
+echo "Used to deactivate the active conda environment"
+
+alias condaInstall='conda install'
+echo "Used to install conda packages:"
+echo "$ condaInstall {packageName}"
+
+alias condaUpdate='conda update conda'
+echo "Used to update the Conda package manager"

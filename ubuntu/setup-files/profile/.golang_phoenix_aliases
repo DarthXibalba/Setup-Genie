@@ -1,0 +1,3 @@
+alias showGoPhoenixAliases='cat ~/.golang_phoenix_aliases'
+
+#sudo env "PATH=$PATH" go test ./internal/k9sclient/client_integration_test.go -v -run TestStartContainerWithAllGPUs
