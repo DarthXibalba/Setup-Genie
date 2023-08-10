@@ -1,4 +1,4 @@
-alias showCondaAliases='cat ~/.miniconda_aliases'
+alias showCondaAliases='cat ~/.conda_aliases'
 
 alias condaVersion='conda --v'
 echo "Used to get conda version"
