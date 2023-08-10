@@ -1,7 +1,7 @@
 {
   "base": {
     "REQUIRED": [
-      "./scripts/copy-bash-profile.sh",
+      "./scripts/setup-bash-profile.sh",
       "./scripts/install-build-essential.sh",
       "./scripts/install-vim.sh",
       "./scripts/install-web-fetchers.sh"
@@ -23,7 +23,7 @@
   },
   "wsl": {
     "REQUIRED": [
-      "./scripts/wsl-enable-systemd.sh"
+      "./scripts/setup-wsl-enable-systemd.sh"
     ],
     "OPTIONAL": []
   },
