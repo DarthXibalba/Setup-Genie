@@ -1,6 +1,7 @@
 #!/bin/bash
 # Get the absolute path of the script directory
 script_dir="$(dirname "$(realpath "$0")")"
+apt_get_install="$script_dir/helper_scripts/apt-get-install.sh"
 
 # Install dependencies
-$script_dir"/helper_scripts/apt-get-install.sh" curl git wget
+$apt_get_install curl git wget

@@ -1,6 +1,7 @@
 #!/bin/bash
 # Get the absolute path of the script directory
 script_dir="$(dirname "$(realpath "$0")")"
+apt_get_install="$script_dir/helper_scripts/apt-get-install.sh"
 
 # Define valid flags
 declare -a valid_flags=("personal" "work")
@@ -74,7 +75,7 @@ if [ -z "${email}" ]; then
 fi
 
 # Install Git if not already installed
-$script_dir"/helper_scripts/apt-get-install.sh" git
+$apt_get_install git
 
 # Check if user.name and user.email are already set
 existing_username=$(git config --global --get user.name)

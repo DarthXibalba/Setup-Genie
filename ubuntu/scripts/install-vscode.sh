@@ -1,6 +1,7 @@
 #!/bin/bash
 # Get the absolute path of the script directory
 script_dir="$(dirname "$(realpath "$0")")"
+apt_get_install="$script_dir/helper_scripts/apt-get-install.sh"
 
 # Install dependencies
 $script_dir"/helper_scripts/apt-get-install.sh" wget gpg
@@ -10,5 +11,5 @@ sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packag
 rm -f packages.microsoft.gpg
 
 # Seperate calls to ensure apt updates between package installations
-$script_dir"/helper_scripts/apt-get-install.sh" apt-transport-https
-$script_dir"/helper_scripts/apt-get-install.sh" code
+$apt_get_install apt-transport-https
+$apt_get_install code

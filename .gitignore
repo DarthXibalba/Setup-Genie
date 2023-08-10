@@ -1,6 +1,7 @@
 # Installer binaries
 *.deb
 *.exe
+*.tar.gz
 
 # Log
 *.log
