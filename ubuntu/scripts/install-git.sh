@@ -74,7 +74,7 @@ if [ -z "${email}" ]; then
 fi
 
 # Install Git if not already installed
-$script_dir"/apt-get-install.sh" git
+$script_dir"/helper_scripts/apt-get-install.sh" git
 
 # Check if user.name and user.email are already set
 existing_username=$(git config --global --get user.name)

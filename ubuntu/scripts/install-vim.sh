@@ -3,4 +3,4 @@
 script_dir="$(dirname "$(realpath "$0")")"
 
 # Install dependencies
-$script_dir"/apt-get-install.sh" vim
+$script_dir"/helper_scripts/apt-get-install.sh" vim
