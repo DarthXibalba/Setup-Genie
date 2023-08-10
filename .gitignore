@@ -1,7 +1,10 @@
-# Installer binaries
+# Installer Binaries
 *.deb
 *.exe
 *.tar.gz
+
+# Setup Files
+setup-files/
 
 # Log
 *.log
