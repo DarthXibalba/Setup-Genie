@@ -1,22 +1,22 @@
 alias showCondaAliases='cat ~/.conda_aliases'
 
+# Used to get conda version
 alias condaVersion='conda --v'
-echo "Used to get conda version"
 
+# Used to create conda environment
+# $ condaCreate {envName} python
 alias condaCreate='conda create -n'
-echo "Used to create conda environment:"
-echo "$ condaCreate {envName} python"
 
+# Used to activate a conda environment
+# $ condaActivate {envName}
 alias condaActivate='conda activate'
-echo "Used to activate a conda environment:"
-echo "$ condaActivate {envName}"
 
+# Used to deactivate the active conda environment
 alias condaDeactivate='conda deactivate'
-echo "Used to deactivate the active conda environment"
 
+# Used to install conda packages
+# $ condaInstall {packageName}
 alias condaInstall='conda install'
-echo "Used to install conda packages:"
-echo "$ condaInstall {packageName}"
 
+# Used to update the Conda package manager
 alias condaUpdate='conda update conda'
-echo "Used to update the Conda package manager"
