@@ -8,7 +8,9 @@
     ],
     "OPTIONAL": [
       "./scripts/install-golang.sh",
-      "./scripts/install-golangci-lint.sh"
+      "./scripts/install-golangci-lint.sh",
+      "./scripts/install-h2ogpt.sh",
+      "./scripts/install-miniconda.sh"
     ]
   },
   "ubuntu": {
