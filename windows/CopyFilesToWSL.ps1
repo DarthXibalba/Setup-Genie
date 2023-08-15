@@ -76,5 +76,9 @@ $scripts = $destinationLinuxPath + "scripts/*.sh"
 $cmd = "chmod +x $scripts"
 wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
 
+$scripts = $destinationLinuxPath + "scripts/helper_scripts/*.sh"
+$cmd = "chmod +x $scripts"
+wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
+
 # Output a message indicating the successful copy operation
 Write-Host "Set correct file permissions."
