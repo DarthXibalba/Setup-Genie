@@ -6,12 +6,14 @@ $ubuntuPath = Join-Path -Path $topLevelPath -ChildPath "ubuntu"
 # Define the array of accepted OS flags
 $acceptedFlags = @(
     'Ubuntu-20.04',
-    'Ubuntu-22.04'
+    'Ubuntu-22.04',
+    'phoenix'
 )
 
 # Define the array of items to copy
 $itemsToCopy = @(
     "config\",
+    "profile\",
     "scripts\",
     "setup-files\",
     "setup.sh"
