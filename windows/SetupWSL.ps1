@@ -1,3 +1,7 @@
+# Suggested Use
+# .\SetupWSL.ps1 -InstallWSL2 -distro=Ubuntu-20.04
+# Note that Re-Synchronizing Windows Time requires ADMIN PRIV
+
 Param (
     [switch]$InstallWSL2,
     [switch]$SetDefaults,

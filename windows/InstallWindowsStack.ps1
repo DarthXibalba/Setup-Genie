@@ -1,6 +1,12 @@
+# Suggested Use
+# .\InstallWindowsStack.ps1
+
 # Get the absolute path of the parent directory of the script
 $scriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $configPath = Join-Path -Path $scriptPath -ChildPath "config/windows_stack.json"
+Write-Host "Installing Windows Stack!"
+Write-Host "scriptPath = $scriptPath"
+Write-Host "configPath = $configPath"
 
 # Read the contents of the config file
 $configContent = Get-Content -Path $configPath -Raw | ConvertFrom-Json
@@ -19,6 +25,7 @@ function IsPackageInstalled($packageName) {
 foreach ($requiredItem in $required) {
     if (!(IsPackageInstalled $requiredItem)) {
         Write-Host "Installing required item: $requiredItem"
+	Write-Host "> winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements"
         winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements
     }
     else {

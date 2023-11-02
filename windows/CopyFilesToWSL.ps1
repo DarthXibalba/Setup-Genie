@@ -1,3 +1,6 @@
+# Suggested Use
+# .\CopyFilesToWSL.ps1 Ubuntu-20.04
+
 # Get the absolute path of the parent directory of the script
 $scriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $topLevelPath = Split-Path -Parent -Path $scriptPath
