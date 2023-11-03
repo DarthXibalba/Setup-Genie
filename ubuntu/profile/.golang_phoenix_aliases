@@ -1,3 +1,12 @@
 alias showGoPhoenixAliases='cat ~/.golang_phoenix_aliases'
 
-#sudo env "PATH=$PATH" go test ./internal/k9sclient/client_integration_test.go -v -run TestStartContainerWithAllGPUs
+alias goClean='go clean -testcache'
+alias goTest='go test -v -count=1 -tags=integration'
+
+# goTest ./k9s/ -run TestWithBridgeNetwork
+# goTest ./internal/k9sclient/client_manual_test.go -run TestCreateZombie
+# sudo env "PATH=$PATH" goTest ./k9s/ -run TestStartNewContainer
+# sudo env "PATH=$PATH" goTest ./k9s/ -run TestStopAll
+# sudo env "PATH=$PATH" goTest ./k9s/ -run TestPruneContainersIntegration
+# sudo env "PATH=$PATH" goTest ./k9s/ -run TestPruneContainersForced
+
