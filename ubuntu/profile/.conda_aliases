@@ -1,0 +1,23 @@
+alias showCondaAliases='cat ~/.conda_aliases'
+
+# Used to get conda version
+alias condaVersion='conda --v'
+
+# Used to create conda environment
+# $ condaCreate {envName} python
+alias condaCreate='conda create -n'
+
+# Used to activate a conda environment
+# $ condaActivate {envName}
+alias condaActivate='conda activate'
+
+# Used to deactivate the active conda environment
+alias condaDeactivate='conda deactivate'
+
+# Used to install conda packages
+# $ condaInstall {packageName}
+alias condaInstall='conda install'
+
+# Used to update the Conda package manager
+alias condaUpdate='conda update conda'
+

@@ -1,0 +1,18 @@
+alias showGoPhoenixAliases='cat ~/.golang_phoenix_aliases'
+
+alias goClean='go clean -testcache'
+alias goTest='go test -v -count=1 -tags=integration'
+alias sudoGoTest='sudo env "PATH=$PATH" go test -v -count=1 -tags=integration'
+
+# k9s setup
+# goTest ./k9s/ -run TestPull
+# sudoGoTest ./k9s/ -run TestPull
+
+# Zombie Creation & Testing:
+# goTest ./k9s/ -run TestWithBridgeNetwork
+# goTest ./internal/k9sclient/client_manual_test.go -run TestCreateZombie
+# sudoGoTest ./k9s/ -run TestStartNewContainer
+# sudoGoTest ./k9s/ -run TestStopAll
+# sudoGoTest ./k9s/ -run TestPruneContainersIntegration
+# sudoGoTest ./k9s/ -run TestPruneContainersForced
+
