@@ -1,32 +1,31 @@
 #!/bin/bash
-# Get the absolute path of the script directory
-script_dir="$(dirname "$(realpath "$0")")"
-wget_download="$script_dir/helper_scripts/wget-download.sh"
 
-# Variables
-version="1.20.4"
-GoURL="https://go.dev/dl/go${version}.linux-amd64.tar.gz"
-GoPath="$script_dir/../setup-files/go${version}.linux-amd64.tar.gz"
-
-# Remove previous installations
-echo "Removing any previous Go installations"
-sudo rm -rf /usr/local/go
-
-# Download
-echo "Downloading and installing Golang v${version}"
-$wget_download $GoURL $GoPath
-
-# Extract
-echo "Extracting the downloaded archive to /usr/local"
-sudo tar -C /usr/local -xzf "${GoPath}"
-
-# Set PATH variable
-echo "Adding /usr/local/go/bin to the PATH environment variable in /etc/profile"
-# Check if exportLine exists in /etc/profile
-exportLine='export PATH=$PATH:/usr/local/go/bin'
-if ! grep -qF "${exportLine}" /etc/profile; then
-    echo "${exportLine}" | sudo tee -a /etc/profile > /dev/null
+if [[ $(id -u) -eq 0 ]]; then
+    echo "This script can not be run as root."
+    exit
 fi
 
-echo -e "Please log out & log back in (or restart your system) to apply changes"
-echo -e "Then verify the installation by running the following: \n $ go version"
+go_version="1.22.4"
+go_url="https://go.dev/dl/go${go_version}.linux-amd64.tar.gz"
+go_file="./go${go_version}.linux-amd64.tar.gz"
+go_root="/usr/local"
+go_dir="${go_root}/go"
+go_bindir="${go_dir}/bin"
+go_export_line='export PATH=$PATH:'${go_bindir}
+
+echo "Removing any previous Go installations"
+sudo rm -rf ${go_dir}
+
+echo "Downloading and installing Golang v${go_version}"
+wget -q "${go_url}" "${go_file}"
+sudo tar -C ${go_root} -xzf "${go_file}"
+
+rm -f "${go_file}"
+
+# Check if go_export_line exists in /etc/profile, if not, add it.
+if ! grep -qF "${go_export_line}" /etc/profile; then
+    echo "Adding ${go_bindir} to the PATH environment variable in /etc/profile"
+    echo "${go_export_line}" | sudo tee -a /etc/profile > /dev/null
+    echo -e "Please log out & log back in (or restart your system) to apply changes"
+    echo -e "Then verify the installation by running the following: \n $ go version"
+fi
