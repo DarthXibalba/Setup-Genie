@@ -11,4 +11,5 @@ rustURL="https://github.com/rustdesk/rustdesk/releases/download/"$version"/rustd
 $wget_download $rustURL $rustPath
 
 # Install the RustDesk Software
-$apt_get_install $rustPath
+sudo apt-get install $rustPath
+
