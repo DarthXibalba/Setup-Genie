@@ -14,6 +14,13 @@ read_config() {
     jq -r ".$section.$key[]" "$json_file"
 }
 
+# Function to get all sections from JSON file
+get_sections() {
+    local json_file=$1
+
+    jq -r 'keys[]' "$json_file"
+}
+
 # Check if jq is installed
 if ! dpkg -s jq >/dev/null 2>&1; then
     echo "jq is not installed. Installing..."
@@ -31,9 +38,31 @@ if [ ! -f "$config_file" ]; then
     exit 1
 fi
 
-# Check if sections are provided as arguments
+# Get valid sections from config file
+valid_sections=($(get_sections "$config_file"))
+
+# Format valid sections for output
+formatted_valid_sections=$(printf " | %s" "${valid_sections[@]}")
+formatted_valid_sections="{${formatted_valid_sections:3}}"
+
+# Check if sections are provided as arguments and if they are valid
 if [ $# -lt 1 ]; then
     echo "Error! No sections specified!"
+    echo "Valid sections are: $formatted_valid_sections"
+    display_usage
+    exit 1
+fi
+
+invalid_sections=()
+for section in "$@"; do
+    if [[ ! " ${valid_sections[@]} " =~ " ${section} " ]]; then
+        invalid_sections+=("$section")
+    fi
+done
+
+if [ ${#invalid_sections[@]} -ne 0 ]; then
+    echo "Error! Invalid sections specified: ${invalid_sections[@]}"
+    echo "Valid sections are: $formatted_valid_sections"
     display_usage
     exit 1
 fi
