@@ -1,47 +1,47 @@
 {
   "common": {
     "REQUIRED": [
-      "./scripts/setup-bash-profile.sh",
-      "./scripts/install-build-essential.sh",
-      "./scripts/install-vim.sh",
-      "./scripts/install-web-fetchers.sh"
+      "scripts/setup-bash-profile.sh",
+      "scripts/install-build-essential.sh",
+      "scripts/install-vim.sh",
+      "scripts/install-web-fetchers.sh"
     ],
     "OPTIONAL": [
-      "./scripts/install-golang.sh",
-      "./scripts/install-golangci-lint.sh"
+      "scripts/install-golang.sh",
+      "scripts/install-golangci-lint.sh"
     ]
   },
   "ubuntu": {
     "REQUIRED": [
-      "./scripts/install-vscode.sh",
-      "./scripts/install-google-chrome.sh",
-      "./scripts/install-nvidia-container-toolkit.sh@ubuntu"
+      "scripts/install-vscode.sh",
+      "scripts/install-google-chrome.sh",
+      "scripts/install-nvidia-container-toolkit.sh@ubuntu"
     ],
     "OPTIONAL": [
-      "./scripts/install-rust-desk-client.sh"
+      "scripts/install-rust-desk-client.sh"
     ]
   },
   "wsl": {
     "REQUIRED": [
-      "./scripts/setup-wsl-enable-systemd.sh",
-      "./scripts/install-nvidia-container-toolkit.sh@wsl-ubuntu"
+      "scripts/setup-wsl-enable-systemd.sh",
+      "scripts/install-nvidia-container-toolkit.sh@wsl-ubuntu"
     ],
     "OPTIONAL": []
   },
   "personal": {
     "REQUIRED": [
-      "./scripts/install-git.sh@personal",
-      "./scripts/install-git-repos.sh@personal"
+      "scripts/install-git.sh@personal",
+      "scripts/install-git-repos.sh@personal"
     ],
     "OPTIONAL": []
   },
   "work": {
     "REQUIRED": [
-      "./scripts/install-git.sh@work",
-      "./scripts/install-git-repos.sh@work"
+      "scripts/install-git.sh@work",
+      "scripts/install-git-repos.sh@work"
     ],
     "OPTIONAL": [
-      "./scripts/install-git-repos.sh@containerd"
+      "scripts/install-git-repos.sh@containerd"
     ]
   }
 }

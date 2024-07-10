@@ -50,8 +50,8 @@ for section in "$@"; do
     else
         echo "Running scripts for section: $section"
         for script in "${required_scripts[@]}"; do
-            # Convert '@' to whitespace in the script content
-            converted_script=${script//@/ }
+            # Convert '@' to whitespace in the script content and expand the path
+            converted_script="${script_dir}/${script//@/ }"
             echo "Running script: $converted_script"
             bash -c "$converted_script"
             echo "Finished running script: $converted_script"
@@ -60,8 +60,8 @@ for section in "$@"; do
 
         # Run the optional scripts
         for script in "${optional_scripts[@]}"; do
-            # Convert '@' to whitespace in the script content
-            converted_script=${script//@/ }
+            # Convert '@' to whitespace in the script content and expand the path
+            converted_script="${script_dir}/${script//@/ }"
             # Prompt to execute script
             read -rp "Do you want to run '$converted_script'? (Y/N): " choice
             if [[ $choice =~ ^[Yy]$ ]]; then
