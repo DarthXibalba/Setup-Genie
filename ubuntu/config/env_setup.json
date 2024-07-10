@@ -1,5 +1,5 @@
 {
-  "base": {
+  "common": {
     "REQUIRED": [
       "./scripts/setup-bash-profile.sh",
       "./scripts/install-build-essential.sh",
@@ -8,15 +8,14 @@
     ],
     "OPTIONAL": [
       "./scripts/install-golang.sh",
-      "./scripts/install-golangci-lint.sh",
-      "./scripts/install-miniconda.sh"
+      "./scripts/install-golangci-lint.sh"
     ]
   },
   "ubuntu": {
     "REQUIRED": [
       "./scripts/install-vscode.sh",
       "./scripts/install-google-chrome.sh",
-      "./scripts/install-hpds-nvidia.sh"
+      "./scripts/install-nvidia-container-toolkit.sh@ubuntu"
     ],
     "OPTIONAL": [
       "./scripts/install-rust-desk-client.sh"
@@ -24,7 +23,8 @@
   },
   "wsl": {
     "REQUIRED": [
-      "./scripts/setup-wsl-enable-systemd.sh"
+      "./scripts/setup-wsl-enable-systemd.sh",
+      "./scripts/install-nvidia-container-toolkit.sh@wsl-ubuntu"
     ],
     "OPTIONAL": []
   },
