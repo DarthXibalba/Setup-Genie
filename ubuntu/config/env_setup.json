@@ -8,7 +8,9 @@
     ],
     "OPTIONAL": [
       "scripts/install-golang.sh",
-      "scripts/install-golangci-lint.sh"
+      "scripts/install-golangci-lint.sh",
+      "scripts/install-container-runtime.sh",
+      "scripts/install-nerdctl.sh"
     ]
   },
   "ubuntu": {
