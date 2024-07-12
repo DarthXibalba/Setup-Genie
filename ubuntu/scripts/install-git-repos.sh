@@ -11,7 +11,8 @@ display_usage() {
 }
 
 # Declare global variables
-declare config_file="./config/gitconfig.json"
+script_dir=$(dirname "$(realpath "$0")")
+declare config_file="$script_dir/../config/gitconfig.json"
 declare config_section
 declare localpath
 declare -a parsed_required

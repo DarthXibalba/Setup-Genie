@@ -14,7 +14,7 @@ display_usage() {
 }
 
 # Declare the global variables
-declare config_file="./config/gitconfig.json"
+declare config_file="$script_dir/../config/gitconfig.json"
 declare config_section
 declare username
 declare email
