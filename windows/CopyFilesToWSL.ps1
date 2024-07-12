@@ -43,11 +43,16 @@ if ($osFlag -notin $acceptedFlags) {
 $wslDistribution = $osFlag
 
 # Set the destination path based on the WSL distribution
-$destinationLinuxPath = "/tmp/MyBuntu/"
-$destinationPath = "\\wsl$\$wslDistribution\tmp\MyBuntu"
+$destinationPath = "\\wsl$\$wslDistribution\tmp\MyBuntu-windows"
+$destinationLinuxPath = "/tmp/MyBuntu-windows/"
+$finalDestinationPath = "\\wsl$\$wslDistribution\tmp\MyBuntu"
+$finalDestinationLinuxPath = "/tmp/MyBuntu/"
 
-# Create the destination directory if it doesn't exist
+# Create the destination directories if they don't exist
 if (!(Test-Path -Path $destinationPath -PathType Container)) {
+    New-Item -ItemType Directory -Path $destinationPath | Out-Null
+}
+if (!(Test-Path -Path $finalDestinationPath -PathType Container)) {
     New-Item -ItemType Directory -Path $destinationPath | Out-Null
 }
 
@@ -74,17 +79,17 @@ Write-Host "Files copied to WSL environment '$wslDistribution' at '$destinationP
 # Combine setup.sh path and all *.sh scripts into one list
 $allScripts = @("$destinationLinuxPath/setup.sh")
 $scriptsPath = "$destinationLinuxPath/scripts"
-$helperScriptsPath = "$scriptsPath/helper_scripts"
+$helperScriptsPath = "$scriptsPath/helper-scripts"
 
-# List all *.sh files in the /scripts/ directory and append to the list
+# List all *.sh files and append to the list
 $allScripts += (wsl -d $wslDistribution --exec sh -c "find $scriptsPath -type f -name '*.sh'")
-# List all *.sh files in the /scripts/helper_scripts/ directory and append to the list
 $allScripts += (wsl -d $wslDistribution --exec sh -c "find $helperScriptsPath -type f -name '*.sh'")
 
 # Apply chmod +x to each script in the list
 foreach ($script in $allScripts) {
-    $cmd = "chmod +x $script"
-    wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
+    wsl -d $wslDistribution --cd / --user root --exec sh -c "chmod +x $script"
+    # Remove carriage returns and save scripts into finalDestination
+    #wsl -d $wslDistribution --cd / --user root --exec sh -c "$helperScriptsPath/remove-carriage-returns.sh"
 }
 
 # Output a message indicating the successful copy operation
