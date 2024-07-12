@@ -71,18 +71,21 @@ foreach ($item in $itemsToCopy) {
 }
 Write-Host "Files copied to WSL environment '$wslDistribution' at '$destinationPath'."
 
-# Set executable permissions for the setup.sh file
-$setupShPath = $destinationLinuxPath + "setup.sh"
-wsl -d $wslDistribution --cd / --user root --exec sh -c "chmod +x $setupShPath"
+# Combine setup.sh path and all *.sh scripts into one list
+$allScripts = @("$destinationLinuxPath/setup.sh")
+$scriptsPath = "$destinationLinuxPath/scripts"
+$helperScriptsPath = "$scriptsPath/helper_scripts"
 
-# Set executable permissions for all *.sh files in the /scripts/ directory
-$scripts = $destinationLinuxPath + "scripts/*.sh"
-$cmd = "chmod +x $scripts"
-wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
+# List all *.sh files in the /scripts/ directory and append to the list
+$allScripts += (wsl -d $wslDistribution --exec sh -c "find $scriptsPath -type f -name '*.sh'")
+# List all *.sh files in the /scripts/helper_scripts/ directory and append to the list
+$allScripts += (wsl -d $wslDistribution --exec sh -c "find $helperScriptsPath -type f -name '*.sh'")
 
-$scripts = $destinationLinuxPath + "scripts/helper_scripts/*.sh"
-$cmd = "chmod +x $scripts"
-wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
+# Apply chmod +x to each script in the list
+foreach ($script in $allScripts) {
+    $cmd = "chmod +x $script"
+    wsl -d $wslDistribution --cd / --user root --exec sh -c "$cmd"
+}
 
 # Output a message indicating the successful copy operation
 Write-Host "Set correct file permissions."
