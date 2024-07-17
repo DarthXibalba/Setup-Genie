@@ -9,6 +9,7 @@ $acceptedWSLDistros = @(
 # Define the array of items to copy
 $itemsToCopy = @(
     "config\",
+    "helper-scripts\"
     "profile\",
     "scripts\",
     "setup-files\",
@@ -24,13 +25,13 @@ if ($args.Count -ne 1) {
 # Retrieve the OS flag from command-line argument
 $WslDistro = $args[0]
 if ($WslDistro -notin $acceptedWSLDistros) {
-    Write-Host "Invalid WSL Distro specified. Please use exactly one of the follwoing: { $($acceptedWSLDistros -join ' | ') }"
+    Write-Host "Invalid WSL Distro specified. Please use exactly one of the following: { $($acceptedWSLDistros -join ' | ') }"
     Write-Host "Example: .\CopyFilesToWSL2.ps1 <WSL Distro>"
     return
 }
 
 # ----- ----- ----- Setup Global Variables ----- ----- ----- #
-
+$VerbosePrinting = $true
 # Get the absolute path of the parent directory of the script
 $ScriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $TopLevelPath = Split-Path -Parent -Path $ScriptPath
@@ -46,7 +47,7 @@ $WslDestinationPathFinal = Join-Path -Path $WslDistroPath -ChildPath ($LinuxDest
 $LinuxCarriageReturnScript = "/tmp/remove-carriage-returns.sh"
 $LinuxCarriageReturnScriptTmp = "/tmp/remove-carriage-returns-tmp.sh"
 $WslCarriageReturnScriptTmp = Join-Path -Path $WslDistroPath -ChildPath ($LinuxCarriageReturnScriptTmp -replace "/", "\")
-$WindowsCarriageReturnScript = Join-Path -Path $UbuntuSetupGeniePath -ChildPath "scripts/helper-scripts/remove-carriage-returns.sh"
+$WindowsCarriageReturnScript = Join-Path -Path $UbuntuSetupGeniePath -ChildPath "helper-scripts/remove-carriage-returns.sh"
 
 # ----- ----- ----- Define Functions ----- ----- ----- #
 function Cleanup-Environment {
@@ -64,7 +65,7 @@ function Copy-ModifyItem {
     )
     # Copy item
     Copy-Item -Path $WinSrcPath -Destination $WinTmpPath -Force
-    Write-Host "Copied $WinSrcPath -> $WinTmpPath"
+    Custom-Write -Text "Copied $WinSrcPath -> $WinTmpPath"
     # Remove-Carriages
     if ($WinSrcPath -notlike "*.deb") {
         Exec-InWslDistro -Cmd "$LinuxCarriageReturnScript $LnxTmpPath $LnxDstPath"
@@ -83,8 +84,25 @@ function Create-DirectoryIfDoesNotExist {
     )
     if (!(Test-Path -Path $DirPath -PathType Container)) {
         New-Item -ItemType Directory -Path $DirPath -Force | Out-Null
-        Write-Host "Created directory $DirPath"
+        Custom-Write -Text "Created directory $DirPath"
     }
+}
+
+function Custom-Write {
+    param (
+        [string]$Text,
+        [bool]$Verbose = $VerbosePrinting
+    )
+    if ($Verbose) {
+        Write-Host "$Text"
+    }
+}
+
+function Debug-Write {
+    param (
+        [string]$Text
+    )
+    Write-Host "[DEBUG] $Text"
 }
 
 function Exec-InWslDistro {
@@ -92,7 +110,7 @@ function Exec-InWslDistro {
         [string]$Cmd,
         [string]$Distro = $WslDistro
     )
-    Write-Host "Executing cmd: $Cmd"
+    Custom-Write -Text "Executing cmd: $Cmd"
     wsl -d $Distro --cd / --user root --exec sh -c "$Cmd"
 }
 
@@ -113,7 +131,7 @@ function Remove-ItemIfExists {
     )
     if (Test-Path -Path $ItemPath) {
         Remove-Item -Path $ItemPath -Force -Recurse
-        Write-Host "Removed $ItemPath"
+        Custom-Write -Text "Removed $ItemPath"
     }
 }
 
@@ -150,6 +168,7 @@ foreach ($item in $itemsToCopy) {
             $lnxDstSubItemPath = "$lnxDstItemPath/$subItemName"
 
             # If subItem is also a directory
+            # JU - Restructureing to avoid recursion since it doesn't work due to not taking into account subdirectories path and only using its contents (child-items)
             if ($subItem.PSIsContainer) {
                 # Recursively copy subdirectories
                 $subItemsToProcess = @($subItem)
@@ -169,7 +188,8 @@ foreach ($item in $itemsToCopy) {
                     if (Test-Path -Path $wslSrcCurItemPath -PathType Container) {
                         Create-DirectoryIfDoesNotExist -DirPath $wslTmpCurItemPath
                         Create-DirectoryIfDoesNotExist -DirPath $wslDstCurItemPath
-                        $subItemsToProcess += Get-ChildItem -Path $wslSrcCurItemPath
+                        $childItems = Get-ChildItem -Path $wslSrcCurItemPath
+                        $subItemsToProcess += $childItems
                     } else {
                         # Else: currentItem is a file
                         Copy-ModifyItem -WinSrcPath $wslSrcCurItemPath -WinTmpPath $wslTmpCurItemPath -LnxTmpPath $lnxTmpCurItemPath -LnxDstPath $lnxDstCurItemPath

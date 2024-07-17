@@ -3,7 +3,7 @@
 # Get the absolute path of the script directory
 script_dir="$(dirname "$(realpath "$0")")"
 profile_dir="$script_dir/../profile"
-rm_carriage_rtn="$script_dir/helper-scripts/remove-carriage-returns.sh"
+rm_carriage_rtn="$script_dir/../helper-scripts/remove-carriage-returns.sh"
 
 # List of files to process
 files=(
