@@ -1,19 +1,21 @@
 alias showNerdctlPhoenixAliases='cat ~/.nerdctl_phoenix_aliases'
-alias execPhx='sudo nerdctl exec -it --namespace phoenix'
-alias lsPhx='sudo nerdctl ps --namespace phoenix'
-alias prunePhx='sudo nerdctl container prune --namespace phoenix --force'
-alias startPhx='sudo nerdctl container start --namespace phoenix'
-alias stopPhx="sudo nerdctl stop --namespace phoenix"
+alias phxExecPhx='sudo nerdctl exec -it --namespace phoenix'
+alias phxImages='sudo nerdctl images --namespace phoenix'
+alias phxCtrs='sudo nerdctl ps --namespace phoenix'
+alias phxPs='sudo nerdctl ps --namespace phoenix'
+alias phxPrune='sudo nerdctl container prune --namespace phoenix --force'
+alias phxStart='sudo nerdctl container start --namespace phoenix'
+alias phxStop="sudo nerdctl stop --namespace phoenix"
 
-stopAllPhx() {
-    local container_ids=$(lsPhx -q)
+phxStopAll() {
+    local container_ids=$(phxCtrs -q)
     for id in $container_ids; do
-        stopPhx "$id"
+        phxStop "$id"
     done
 }
 
-wipePhx() {
-    stopAllPhx
-    prunePhx
+phxWipe() {
+    phxStopAll
+    phxPrune
 }
 
