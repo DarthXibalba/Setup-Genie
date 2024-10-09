@@ -13,8 +13,9 @@ phoenix_bindir="${phoenix_appdir}/bin"
 phoenix_etcdir="/etc/opt/hp/${product_name}"
 phoenix_group=${product_name}
 
+# Note: containerd, runc, & cni versions were determined by what comes packaged in nerdctl-full-2.0.0-rc.0-linux-amd64.tar.gz release
 # containerd info
-containerd_version="1.7.11"
+containerd_version="2.0.0-rc.3"
 containerd_config_dir="${phoenix_etcdir}/containerd"
 containerd_config_file="config.toml"
 containerd_root="/var/lib/hp/${product_name}/containerd"
@@ -25,11 +26,11 @@ containerd_unit_dir="/usr/local/lib/systemd/system"
 containerd_unit_file="hp-${product_name}-containerd.service"
 
 # runc info
-runc_version="1.1.10"
+runc_version="1.1.13"
 runc_bindir="/usr/local/sbin"
 
 # CNI info
-cni_version="1.1.1"
+cni_version="1.5.1"
 cni_bindir="/opt/cni/bin"
 
 generate_containerd_conf_file() {

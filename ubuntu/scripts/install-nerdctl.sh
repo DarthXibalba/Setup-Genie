@@ -5,7 +5,7 @@ if [[ $(id -u) -eq 0 ]]; then
     exit
 fi
 
-nerdctl_version="1.7.3"
+nerdctl_version="2.0.0-rc.0"
 nerdctl_file="nerdctl-${nerdctl_version}-linux-amd64.tar.gz"
 nerdctl_url="https://github.com/containerd/nerdctl/releases/download/v${nerdctl_version}/nerdctl-${nerdctl_version}-linux-amd64.tar.gz"
 nerdctl_bindir="/usr/local/bin"
