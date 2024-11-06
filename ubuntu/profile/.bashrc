@@ -113,7 +113,9 @@ fi
 if [ -f ~/.nerdctl_phoenix_aliases ]; then
     . ~/.nerdctl_phoenix_aliases
 fi
-
+if [ -f ~/.phoenixrc ]; then
+    . ~/.phoenixrc
+fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
