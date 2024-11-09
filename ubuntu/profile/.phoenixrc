@@ -1,4 +1,4 @@
 # Phoenix dev
-export LD_LIBRARY_PATH=/home/account2/hpds_dev/phoenix-app-desktop/build/bin
+export LD_LIBRARY_PATH=$HOME/hpds_dev/phoenix-app-desktop/build/bin
 export GOPRIVATE=github.azc.ext.hp.com/
 export PATH=$PATH:$(go env GOPATH)/bin
