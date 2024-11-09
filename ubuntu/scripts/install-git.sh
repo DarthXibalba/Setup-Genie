@@ -60,7 +60,7 @@ display_usage() {
     echo "$usage_message"
 }
 
-# Function to read username and email from config file
+# Function to read username, email, & PAT from config file
 read_config_values() {
     local key_username="USERNAME"
     local key_email="EMAIL"

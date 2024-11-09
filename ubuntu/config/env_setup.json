@@ -40,7 +40,8 @@
   "work": {
     "REQUIRED": [
       "scripts/install-git.sh@work",
-      "scripts/install-git-repos.sh@work"
+      "scripts/install-git-repos.sh@work",
+      "scripts/write-hooh-file.sh"
     ],
     "OPTIONAL": [
       "scripts/install-git-repos.sh@containerd"
