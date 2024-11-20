@@ -16,10 +16,10 @@
   "ubuntu": {
     "REQUIRED": [
       "scripts/install-vscode.sh",
-      "scripts/install-google-chrome.sh"
+      "scripts/install-google-chrome.sh",
+      "scripts/install-ubuntu-nvidia-drivers.sh"
     ],
     "OPTIONAL": [
-      "scripts/install-nvidia-container-toolkit.sh@ubuntu",
       "scripts/install-rust-desk-client.sh",
       "scripts/install-zoom-client.sh"
     ]
