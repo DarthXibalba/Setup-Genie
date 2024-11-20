@@ -20,6 +20,7 @@
       "scripts/install-ubuntu-nvidia-drivers.sh"
     ],
     "OPTIONAL": [
+      "scripts/install-aws-cli-v2.sh",
       "scripts/install-rust-desk-client.sh",
       "scripts/install-zoom-client.sh"
     ]
