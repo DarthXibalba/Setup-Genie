@@ -1,4 +1,4 @@
-alias showNerdctlPhoenixAliases='cat ~/.nerdctl_phoenix_aliases'
+alias showNerdctlPhoenixAliases='cat ~/.phoenix_nerdctl_aliases'
 
 PHX_SOCK_ADDRESS="/run/hp/aistudio/containerd/containerd.sock"
 PHX_NAMESPACE="phoenix"

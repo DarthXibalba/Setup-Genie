@@ -1,4 +1,4 @@
-alias showGoPhoenixAliases='cat ~/.golang_phoenix_aliases'
+alias showGoPhoenixAliases='cat ~/.phoenix_golang_aliases'
 
 alias goClean='go clean -testcache'
 alias goTest='go test -v -count=1 -tags=integration'
