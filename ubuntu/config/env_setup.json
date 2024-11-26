@@ -16,10 +16,10 @@
   "ubuntu": {
     "REQUIRED": [
       "scripts/install-vscode.sh",
-      "scripts/install-google-chrome.sh",
-      "scripts/install-ubuntu-nvidia-drivers.sh"
+      "scripts/install-google-chrome.sh"
     ],
     "OPTIONAL": [
+      "scripts/install-ubuntu-nvidia-drivers.sh",
       "scripts/install-aws-cli-v2.sh",
       "scripts/install-trivy.sh",
       "scripts/install-rust-desk-client.sh",

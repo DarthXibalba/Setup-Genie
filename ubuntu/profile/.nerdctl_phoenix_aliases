@@ -1,14 +1,51 @@
 alias showNerdctlPhoenixAliases='cat ~/.nerdctl_phoenix_aliases'
-alias phxExecPhx='sudo nerdctl exec -it --namespace phoenix'
-alias phxImages='sudo nerdctl images --namespace phoenix'
-alias phxCtrs='sudo nerdctl ps --namespace phoenix'
-alias phxPs='sudo nerdctl ps --namespace phoenix'
-alias phxPrune='sudo nerdctl container prune --namespace phoenix --force'
-alias phxStart='sudo nerdctl container start --namespace phoenix'
-alias phxStop="sudo nerdctl stop --namespace phoenix"
+
+PHX_SOCK_ADDRESS="/run/hp/aistudio/containerd/containerd.sock"
+PHX_NAMESPACE="phoenix"
+
+PHX_ADDRESS_FLAG="--address $PHX_SOCK_ADDRESS"
+PHX_NAMESPACE_FLAG="--namespace $PHX_NAMESPACE"
+PHX_NERDCTL="sudo env \"PATH=$PATH\" nerdctl $PHX_ADDRESS_FLAG $PHX_NAMESPACE_FLAG"
+
+# List info
+alias phxPs="$PHX_NERDCTL ps"
+alias phxCtrs="$PHX_NERDCTL ps"
+alias phxImages="$PHX_NERDCTL images"
+
+# Build images
+phxBuild() {
+    local tag="$1"
+    local file="$2"
+    if [[ -z "$tag" || -z "$file" ]]; then
+        echo "Error: You must specify both a tag and a Dockerfile."
+        echo "Usage: phxBuild <tag> <file>"
+        return 1
+    fi
+    $PHX_NERDCTL build -t "$tag" -f "$file" .
+}
+
+# Exec, Run, Run Interactive Terminal, Run Interactive Bash
+alias phxExec="$PHX_NERDCTL exec -it"
+alias phxRun="$PHX_NERDCTL run"
+alias phxRunIt="$PHX_NERDCTL run -it"
+
+phxRunItBash() {
+    local image="$1"
+    if [[ -z "$image" ]]; then
+        echo "Error: You must specify an image name."
+        echo "Usage: phxRunItBash <image>"
+        return 1
+    fi
+    phxRunIt "$image" /bin/bash
+}
+
+# Start, Stop, Prune
+alias phxStart="$PHX_NERDCTL container start"
+alias phxStop="$PHX_NERDCTL stop"
+alias phxPrune="$PHX_NERDCTL container prune --force"
 
 phxStopAll() {
-    local container_ids=$(phxCtrs -q)
+    local container_ids=$(phxCtrs --quiet)
     for id in $container_ids; do
         phxStop "$id"
     done
