@@ -13,7 +13,8 @@ alias phxCtrs="$PHX_NERDCTL ps"
 alias phxImages="$PHX_NERDCTL images"
 
 # Build images
-phxBuild() {
+alias phzBuild="$PHX_NERDCTL build"
+phxBuildImage() {
     local tag="$1"
     local file="$2"
     if [[ -z "$tag" || -z "$file" ]]; then
@@ -21,7 +22,7 @@ phxBuild() {
         echo "Usage: phxBuild <tag> <file>"
         return 1
     fi
-    $PHX_NERDCTL build -t "$tag" -f "$file" .
+    phzBuild -t "$tag" -f "$file" .
 }
 
 # Exec, Run, Run Interactive Terminal, Run Interactive Bash
