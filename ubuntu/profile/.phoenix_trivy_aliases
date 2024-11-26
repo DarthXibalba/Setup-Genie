@@ -1,0 +1,36 @@
+alias showTrivyAliases='cat ~/.phoenix_trivy_aliases'
+
+# TODO: Add .trivyignore
+# TODO: Add --ignore-files (private key files)
+# Define the trivyScan function
+trivyScan() {
+    local file="$1"
+
+    # Input validation
+    if [[ -z "$file" ]]; then
+        echo "Error: You must specify a file."
+        echo "Usage: trivyScan <file>"
+        return 1
+    fi
+
+    # Extract the base name from the file (e.g., minjp-gpu-v1.10.2.tar -> minjp-gpu-v1.10.2)
+    local base_name
+    base_name=$(basename "$file" .tar)
+
+    # Construct the output filename
+    local output_file="trivy-scan-${base_name}.json"
+
+    # Run the trivy command
+    trivy image \
+        --severity HIGH,CRITICAL \
+        --timeout 60m \
+        --ignore-unfixed \
+        --exit-code 1 \
+        --format json \
+        --ignorefile .trivyignore \
+        --output "$output_file" \
+        --input "$file"
+
+    # Notify user of output
+    echo "Trivy scan complete. Results saved to $output_file"
+}

@@ -107,14 +107,17 @@ fi
 if [ -f ~/.conda_aliases ]; then
     . ~/.conda_aliases
 fi
-if [ -f ~/.golang_phoenix_aliases ]; then
-    . ~/.golang_phoenix_aliases
-fi
-if [ -f ~/.nerdctl_phoenix_aliases ]; then
-    . ~/.nerdctl_phoenix_aliases
-fi
 if [ -f ~/.phoenixrc ]; then
     . ~/.phoenixrc
+fi
+if [ -f ~/.phoenix_golang_aliases ]; then
+    . ~/.phoenix_golang_aliases
+fi
+if [ -f ~/.phoenix_nerdctl_aliases ]; then
+    . ~/.phoenix_nerdctl_aliases
+fi
+if [ -f ~/.phoenix_trivy_aliases ]; then
+    . ~/.phoenix_trivy_aliases
 fi
 
 # enable programmable completion features (you don't need to enable
