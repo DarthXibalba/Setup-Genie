@@ -14,6 +14,8 @@ $configContent = Get-Content -Path $configPath -Raw | ConvertFrom-Json
 # Access and use the configuration values
 $required = $configContent.REQUIRED
 $optional = $configContent.OPTIONAL
+Write-Host "required pkgs = [$required]"
+Write-Host "optional pkgs = [$optional]"
 
 # Function to check if a package is installed using winget
 function IsPackageInstalled($packageName) {
@@ -22,6 +24,7 @@ function IsPackageInstalled($packageName) {
 }
 
 # Iterate over required values and install the required items if not already installed
+Write-Host "Installing required packages"
 foreach ($requiredItem in $required) {
     if (!(IsPackageInstalled $requiredItem)) {
         Write-Host "Installing required item: $requiredItem"
@@ -34,6 +37,7 @@ foreach ($requiredItem in $required) {
 }
 
 # Iterate over optional values and prompt the user for confirmation
+Write-Host "Installing optional packages"
 foreach ($optionalItem in $optional) {
     if (!(IsPackageInstalled $optionalItem)) {
         $installOptional = Read-Host "Do you want to install the optional item: $optionalItem ? (Y/N)"

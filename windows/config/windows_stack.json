@@ -9,6 +9,7 @@
     "OPTIONAL": [
         "Google.Drive",
         "IDRIX.VeraCrypt",
+        "Microsoft.Teams",
         "Mozilla.Firefox",
         "RustDesk.RustDesk",
         "Valve.Steam",
