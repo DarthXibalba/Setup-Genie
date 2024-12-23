@@ -17,10 +17,14 @@ $optional = $configContent.OPTIONAL
 Write-Host "required pkgs = [$required]"
 Write-Host "optional pkgs = [$optional]"
 
-# Function to check if a package is installed using winget
+# Load the winget list output once into a variable
+Write-Host "Loading installed packages using winget..."
+$wingetList = winget list
+
+# Function to check if a package is installed using the cached winget list
 function IsPackageInstalled($packageName) {
-    $packageList = winget list $packageName
-    return $packageList -match "$packageName"
+    # Check if the package name exists in the cached winget list
+    return $wingetList | Select-String -SimpleMatch $packageName
 }
 
 # Iterate over required values and install the required items if not already installed
@@ -28,7 +32,7 @@ Write-Host "Installing required packages"
 foreach ($requiredItem in $required) {
     if (!(IsPackageInstalled $requiredItem)) {
         Write-Host "Installing required item: $requiredItem"
-	Write-Host "> winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements"
+        Write-Host "> winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements"
         winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements
     }
     else {
