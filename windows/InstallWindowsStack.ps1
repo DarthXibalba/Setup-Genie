@@ -4,9 +4,14 @@
 # Get the absolute path of the parent directory of the script
 $scriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 $configPath = Join-Path -Path $scriptPath -ChildPath "config/windows_stack.json"
+$helperScriptPath = Join-Path -Path $scriptPath -ChildPath "./helper-scripts/InstallWingetPkg.ps1"
+
 Write-Host "Installing Windows Stack!"
 Write-Host "scriptPath = $scriptPath"
 Write-Host "configPath = $configPath"
+
+# Import the InstallWingetPkg.ps1 script to access Install-WingetPackage
+. $helperScriptPath
 
 # Read the contents of the config file
 $configContent = Get-Content -Path $configPath -Raw | ConvertFrom-Json
@@ -31,9 +36,7 @@ function IsPackageInstalled($packageName) {
 Write-Host "Installing required packages"
 foreach ($requiredItem in $required) {
     if (!(IsPackageInstalled $requiredItem)) {
-        Write-Host "Installing required item: $requiredItem"
-        Write-Host "> winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements"
-        winget install -e --id $requiredItem --silent --accept-package-agreements --accept-source-agreements
+        Install-WingetPackage -PackageName $requiredItem -NoCheck
     }
     else {
         Write-Host "Required item $requiredItem is already installed"
@@ -46,8 +49,7 @@ foreach ($optionalItem in $optional) {
     if (!(IsPackageInstalled $optionalItem)) {
         $installOptional = Read-Host "Do you want to install the optional item: $optionalItem ? (Y/N)"
         if ($installOptional -eq "Y" -or $installOptional -eq "y") {
-            Write-Host "Installing optional item: $optionalItem"
-            winget install -e --id $optionalItem --silent --accept-package-agreements --accept-source-agreements
+            Install-WingetPackage -PackageName $optionalItem -NoCheck
         }
     }
     else {
