@@ -41,7 +41,7 @@ function Configure-Git {
 # Main Script Logic
 # Get the absolute path of the parent directory of the script
 $scriptPath = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-$configPath = Join-Path -Path $scriptPath -ChildPath "../ubuntu/config/gitconfig.json"
+$configPath = Join-Path -Path $scriptPath -ChildPath "../../ubuntu/config/gitconfig.json"
 
 # Check if config file exists
 if (-not (Test-Path -Path $configPath)) {
