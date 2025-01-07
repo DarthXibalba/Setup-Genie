@@ -113,8 +113,8 @@ fi
 if [ -f ~/.phoenix_golang_aliases ]; then
     . ~/.phoenix_golang_aliases
 fi
-if [ -f ~/.phoenix_nerdctl_aliases ]; then
-    . ~/.phoenix_nerdctl_aliases
+if [ -f ~/.phoenix_containerd_aliases ]; then
+    . ~/.phoenix_containerd_aliases
 fi
 if [ -f ~/.phoenix_trivy_aliases ]; then
     . ~/.phoenix_trivy_aliases

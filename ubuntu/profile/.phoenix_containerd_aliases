@@ -1,4 +1,4 @@
-alias showNerdctlPhoenixAliases='cat ~/.phoenix_nerdctl_aliases'
+alias showPhoenixContainerdAliases='cat ~/.phoenix_containerd_aliases'
 
 PHX_SOCK_ADDRESS="/run/hp/aistudio/containerd/containerd.sock"
 PHX_NAMESPACE="phoenix"
@@ -7,28 +7,43 @@ PHX_ADDRESS_FLAG="--address $PHX_SOCK_ADDRESS"
 PHX_NAMESPACE_FLAG="--namespace $PHX_NAMESPACE"
 PHX_NERDCTL="sudo env \"PATH=$PATH\" nerdctl $PHX_ADDRESS_FLAG $PHX_NAMESPACE_FLAG"
 
+# Catch all alias to run any other nerdctl cmds not listed here
+alias phxNerdctl="$PHX_NERDCTL"
+
 # List info
 alias phxPs="$PHX_NERDCTL ps"
 alias phxCtrs="$PHX_NERDCTL ps"
 alias phxImages="$PHX_NERDCTL images"
 
-# Build images
-alias phzBuild="$PHX_NERDCTL build"
+# Images: Building & Saving
+alias _phxBuild="$PHX_NERDCTL build"
 phxBuildImage() {
     local tag="$1"
     local file="$2"
     if [[ -z "$tag" || -z "$file" ]]; then
         echo "Error: You must specify both a tag and a Dockerfile."
-        echo "Usage: phxBuild <tag> <file>"
+        echo "Usage: phxBuildImage <tag> <file>"
         return 1
     fi
-    phzBuild -t "$tag" -f "$file" .
+    _phxBuild -t "$tag" -f "$file" .
 }
 
-# Exec, Run, Run Interactive Terminal, Run Interactive Bash
-alias phxExec="$PHX_NERDCTL exec -it"
-alias phxRun="$PHX_NERDCTL run"
-alias phxRunIt="$PHX_NERDCTL run -it"
+alias _phxImageSave="$PHX_NERDCTL image save"
+phxImageSave() {
+    local image="$1"
+    local path="$2"
+    if [[ -z "$image" || -z "$path" ]]; then
+        echo "Error: You must specify the image to save and a path to save it to (recommend to save it as .tar)"
+        echo "Usage: phxImageSave <image> <path>"
+        return 1
+    fi
+    _phxImageSave "$image" -o "$path"
+}
+
+# Containers: Exec, Run, Run Interactive Terminal, Run Interactive Bash
+alias phxExec="$PHX_NERDCTL container exec -it"
+alias phxRun="$PHX_NERDCTL container run"
+alias phxRunIt="$PHX_NERDCTL container run -it"
 
 phxRunItBash() {
     local image="$1"
@@ -40,9 +55,10 @@ phxRunItBash() {
     phxRunIt "$image" /bin/bash
 }
 
-# Start, Stop, Prune
+# Containers: Create, Start, Stop, Prune
+alias phxCreate="$PHX_NERDCTL container create"
 alias phxStart="$PHX_NERDCTL container start"
-alias phxStop="$PHX_NERDCTL stop"
+alias phxStop="$PHX_NERDCTL container stop"
 alias phxPrune="$PHX_NERDCTL container prune --force"
 
 phxStopAll() {

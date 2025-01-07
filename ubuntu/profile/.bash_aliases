@@ -9,6 +9,6 @@ showAliases() {
     echo ""
     echo "----- ----- ***** Nerdctl Phoenix Aliases: ***** ----- -----"
     echo ""
-    showNerdctlPhoenixAliases
+    showPhoenixContainerdAliases
     echo ""
 }
