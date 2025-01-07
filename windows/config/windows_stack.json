@@ -1,16 +1,18 @@
 {
     "REQUIRED": [
-        "ExpressVPN.ExpressVPN",
-        "Git.Git",
         "Google.Chrome",
+        "Microsoft.VisualStudioCode",
+        "Git.Git",
         "GoLang.Go",
-        "Microsoft.VisualStudioCode"
+        "ExpressVPN.ExpressVPN"
     ],
     "OPTIONAL": [
         "Google.Drive",
         "IDRIX.VeraCrypt",
+        "Malwarebytes.Malwarebytes",
         "Microsoft.Teams",
         "Mozilla.Firefox",
+        "Piriform.CCleaner",
         "RustDesk.RustDesk",
         "Valve.Steam",
         "Zoom.Zoom"
