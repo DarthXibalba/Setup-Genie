@@ -7,12 +7,14 @@
         "ExpressVPN.ExpressVPN"
     ],
     "OPTIONAL": [
+        "Discord.Discord",
         "Google.Drive",
         "IDRIX.VeraCrypt",
         "Malwarebytes.Malwarebytes",
         "Microsoft.Teams",
         "Mozilla.Firefox",
         "Piriform.CCleaner",
+        "Spotify.Spotify",
         "RustDesk.RustDesk",
         "Valve.Steam",
         "Zoom.Zoom"
