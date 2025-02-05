@@ -4,7 +4,8 @@
         "Microsoft.VisualStudioCode",
         "Git.Git",
         "GoLang.Go",
-        "ExpressVPN.ExpressVPN"
+        "ExpressVPN.ExpressVPN",
+        "VideoLAN.VLC"
     ],
     "OPTIONAL": [
         "Discord.Discord",
