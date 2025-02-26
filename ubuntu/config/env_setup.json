@@ -2,9 +2,9 @@
   "common": {
     "REQUIRED": [
       "scripts/setup-bash-profile.sh",
-      "scripts/install-build-essential.sh",
       "scripts/install-vim.sh",
-      "scripts/install-web-fetchers.sh"
+      "scripts/install-networking-tools.sh",
+      "scripts/install-build-essential.sh"
     ],
     "OPTIONAL": [
       "scripts/install-golang.sh",
