@@ -1,4 +1,9 @@
 #!/bin/bash
+# TODO:
+# - Add "git remote set-url origin https://github.azc.ext.hp.com/phoenix/hooh.git"
+# OR
+# - Remove "https://${pat}@${repo}" and instead write to ~/.gitconfig (+sudo user version)
+# - Include overwriting to update token
 
 # Define valid flags
 declare -a valid_flags=("personal" "work" "containerd")
