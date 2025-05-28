@@ -4,6 +4,7 @@
 # OR
 # - Remove "https://${pat}@${repo}" and instead write to ~/.gitconfig (+sudo user version)
 # - Include overwriting to update token
+# - Update ~/.hooh when applicable
 
 # Define valid flags
 declare -a valid_flags=("personal" "work" "containerd")
