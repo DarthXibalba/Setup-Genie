@@ -4,12 +4,13 @@ script_dir="$(dirname "$(realpath "$0")")"
 apt_get_install="$script_dir/../helper-scripts/apt-get-install.sh"
 wget_download="$script_dir/../helper-scripts/wget-download.sh"
 
-# Download the RustDesk Software
-version="1.1.8"
-rustPath="$script_dir/../setup-files/rustdesk-$version.deb"
-rustURL="https://github.com/rustdesk/rustdesk/releases/download/$version/rustdesk-$version.deb"
-$wget_download $rustURL $rustPath
+version="1.4.3"
+arch="x86_64"
+rustPath="/tmp/rustdesk-$version-$arch.deb"
+rustURL="https://github.com/rustdesk/rustdesk/releases/download/$version/rustdesk-$version-$arch.deb"
 
-# Install the RustDesk Software
-sudo apt-get install $rustPath
+# Download
+$wget_download $rustURL $rustPath
+# Install
+$apt_get_install $rustPath
 
