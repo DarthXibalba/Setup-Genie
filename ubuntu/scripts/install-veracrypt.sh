@@ -13,4 +13,5 @@ url="https://launchpad.net/veracrypt/trunk/$version/+download/veracrypt-$version
 # Download
 $wget_download $url $downloadPath
 # Install
-$apt_get_install $downloadPath
+#$apt_get_install $downloadPath
+sudo apt --fix-broken install $downloadPath
