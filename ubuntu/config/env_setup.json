@@ -9,6 +9,7 @@
     "OPTIONAL": [
       "scripts/install-golang.sh",
       "scripts/install-golangci-lint.sh",
+      "scipts/install-python3.sh",
       "scripts/install-container-runtime.sh",
       "scripts/install-nerdctl.sh"
     ]

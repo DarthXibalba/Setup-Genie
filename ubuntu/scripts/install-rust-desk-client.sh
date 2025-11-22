@@ -13,4 +13,3 @@ rustURL="https://github.com/rustdesk/rustdesk/releases/download/$version/rustdes
 $wget_download $rustURL $rustPath
 # Install
 $apt_get_install $rustPath
-
