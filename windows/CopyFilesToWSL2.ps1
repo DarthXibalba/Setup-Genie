@@ -2,8 +2,7 @@
 $acceptedWSLDistros = @(
     'Ubuntu',
     'Ubuntu-20.04',
-    'Ubuntu-22.04',
-    'phoenix'
+    'Ubuntu-22.04'
 )
 
 # Define the array of items to copy
@@ -12,7 +11,6 @@ $itemsToCopy = @(
     "helper-scripts\"
     "profile\",
     "scripts\",
-    "setup-files\",
     "setup.sh"
 )
 
