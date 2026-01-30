@@ -3,8 +3,8 @@
     "REQUIRED": [
       "scripts/setup-bash-profile.sh",
       "scripts/install-vim.sh",
-      "scripts/install-networking-tools.sh",
-      "scripts/install-build-essential.sh"
+      "scripts/install-tools-build-essential.sh",
+      "scripts/install-tools-networking.sh"
     ],
     "OPTIONAL": [
       "scripts/install-golang.sh",
