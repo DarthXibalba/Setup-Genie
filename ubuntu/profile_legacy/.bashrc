@@ -104,6 +104,21 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+if [ -f ~/.conda_aliases ]; then
+    . ~/.conda_aliases
+fi
+if [ -f ~/.phoenixrc ]; then
+    . ~/.phoenixrc
+fi
+if [ -f ~/.phoenix_golang_aliases ]; then
+    . ~/.phoenix_golang_aliases
+fi
+if [ -f ~/.phoenix_containerd_aliases ]; then
+    . ~/.phoenix_containerd_aliases
+fi
+if [ -f ~/.phoenix_trivy_aliases ]; then
+    . ~/.phoenix_trivy_aliases
+fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

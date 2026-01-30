@@ -1,14 +1,12 @@
-showAliases() {
-    echo "----- ----- ***** Conda Aliases: ***** ----- -----"
-    echo ""
-    showCondaAliases
-    echo ""
-    echo "----- ----- ***** Go Phoenix Aliases: ***** ----- -----"
-    echo ""
-    showGoPhoenixAliases
-    echo ""
-    echo "----- ----- ***** Nerdctl Phoenix Aliases: ***** ----- -----"
-    echo ""
-    showPhoenixContainerdAliases
-    echo ""
-}
+# Git
+alias gitadd='git add'
+alias gitcommit='git commit -m'
+alias gitdiff='git diff'
+alias gitlog='git log'
+alias gitpull='git pull'
+alias gitpullorigin='git pull origin'
+alias gitpulloriginmain='git pull origin main'
+alias gitpushorigin='git push'
+alias gitpushorigin='git push origin'
+alias gitpushoriginmain='git push origin main'
+alias gitstatus='git status'
