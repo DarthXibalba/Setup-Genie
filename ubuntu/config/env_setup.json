@@ -1,5 +1,5 @@
 {
-  "common": {
+  "devtools": {
     "REQUIRED": [
       "scripts/setup-bash-profile.sh",
       "scripts/install-vim.sh",
