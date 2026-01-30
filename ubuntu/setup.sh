@@ -1,110 +1,135 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Function to display script usage
+# =========================
+# Functions
+# =========================
+
 display_usage() {
-    echo "Usage: $0 <section>..."
+    log_info "Usage: $0 <section>..."
 }
 
-# Function to read config values from JSON file
 read_config() {
-    local json_file=$1
-    local section=$2
-    local key=$3
+    local json_file="$1"
+    local section="$2"
+    local key="$3"
 
     jq -r ".$section.$key[]" "$json_file"
 }
 
-# Function to get all sections from JSON file
 get_sections() {
-    local json_file=$1
-
+    local json_file="$1"
     jq -r 'keys[]' "$json_file"
 }
 
-# Check if jq is installed
-if ! dpkg -s jq >/dev/null 2>&1; then
-    echo "jq is not installed. Installing..."
-    sudo apt-get update
-    sudo apt-get install jq -y
-fi
+# =========================
+# Paths + logging
+# =========================
 
-# Get absolute path of config_file
-script_dir=$(dirname "$(realpath "$0")")
-config_file="$script_dir/config/env_setup.json"
+script_dir="$(dirname "$(realpath "$0")")"
+logging_file="$script_dir/helper-scripts/logging.sh"
 
-# Check if config file exists
-if [ ! -f "$config_file" ]; then
-    echo "Error! Config file '$config_file' not found!"
+if [ ! -f "$logging_file" ]; then
+    echo "ERROR: logging helper not found at: $logging_file"
     exit 1
 fi
 
-# Get valid sections from config file
+# shellcheck source=/dev/null
+source "$logging_file"
+
+config_file="$script_dir/config/env_setup.json"
+
+# =========================
+# Preconditions
+# =========================
+
+if ! dpkg -s jq >/dev/null 2>&1; then
+    log_warn "jq is not installed. Installing..."
+    sudo apt-get update
+    sudo apt-get install -y jq
+    log_success "jq installed"
+fi
+
+if [ ! -f "$config_file" ]; then
+    log_error "Config file '$config_file' not found!"
+    exit 1
+fi
+
 valid_sections=($(get_sections "$config_file"))
+formatted_valid_sections="{ $(printf "%s " "${valid_sections[@]}")}"
 
-# Format valid sections for output
-formatted_valid_sections=$(printf " | %s" "${valid_sections[@]}")
-formatted_valid_sections="{${formatted_valid_sections:3}}"
+# =========================
+# Argument validation
+# =========================
 
-# Check if sections are provided as arguments and if they are valid
 if [ $# -lt 1 ]; then
-    echo "Error! No sections specified!"
-    echo "Valid sections are: $formatted_valid_sections"
+    log_error "No sections specified!"
+    log_info "Valid sections are: $formatted_valid_sections"
     display_usage
     exit 1
 fi
 
 invalid_sections=()
 for section in "$@"; do
-    if [[ ! " ${valid_sections[@]} " =~ " ${section} " ]]; then
+    if [[ ! " ${valid_sections[*]} " =~ " ${section} " ]]; then
         invalid_sections+=("$section")
     fi
 done
 
 if [ ${#invalid_sections[@]} -ne 0 ]; then
-    echo "Error! Invalid sections specified: ${invalid_sections[@]}"
-    echo "Valid sections are: $formatted_valid_sections"
+    log_error "Invalid sections specified: ${invalid_sections[*]}"
+    log_info "Valid sections are: $formatted_valid_sections"
     display_usage
     exit 1
 fi
 
-# Read config values from the JSON file for each section
+# =========================
+# Execution
+# =========================
+
 for section in "$@"; do
     required_scripts=($(read_config "$config_file" "$section" "REQUIRED"))
     optional_scripts=($(read_config "$config_file" "$section" "OPTIONAL"))
 
-    # Check if required scripts are defined
     if [ ${#required_scripts[@]} -eq 0 ]; then
-        echo "Warning! No required scripts defined for section: $section"
+        log_warn "No required scripts defined for section: $section"
         continue
-    else
-        echo "Running scripts for section: $section"
-        for script in "${required_scripts[@]}"; do
-            # Convert '@' to whitespace in the script content and expand the path
-            converted_script="${script_dir}/${script//@/ }"
-            echo "Running script: $converted_script"
-            bash -c "$converted_script"
-            echo "Finished running script: $converted_script"
-            echo ""
-        done
-
-        # Run the optional scripts
-        for script in "${optional_scripts[@]}"; do
-            # Convert '@' to whitespace in the script content and expand the path
-            converted_script="${script_dir}/${script//@/ }"
-            # Prompt to execute script
-            read -rp "Do you want to run '$converted_script'? (Y/N): " choice
-            if [[ $choice =~ ^[Yy]$ ]]; then
-                echo "Running optional script: $converted_script"
-                bash -c "$converted_script"
-                echo "Finished running optional script: $converted_script"
-                echo ""
-            else
-                echo "Skipping optional script: $converted_script"
-                echo ""
-            fi
-        done
-
-        echo "Finished running scripts for section: $section"
-        echo ""
     fi
+
+    log_step "Running REQUIRED scripts for section: $section"
+
+    for script in "${required_scripts[@]}"; do
+        converted_script="${script_dir}/${script//@/ }"
+        log_info "Running script: $converted_script"
+
+        if bash -c "$converted_script"; then
+            log_success "Finished: $converted_script"
+        else
+            log_error "Script failed: $converted_script"
+            exit 1
+        fi
+        echo
+    done
+
+    for script in "${optional_scripts[@]}"; do
+        converted_script="${script_dir}/${script//@/ }"
+        read -rp "Run optional script '$converted_script'? (Y/N): " choice
+
+        if [[ $choice =~ ^[Yy]$ ]]; then
+            log_info "Running optional script: $converted_script"
+            if bash -c "$converted_script"; then
+                log_success "Finished optional script: $converted_script"
+            else
+                log_error "Optional script failed: $converted_script"
+                exit 1
+            fi
+        else
+            log_warn "Skipped optional script: $converted_script"
+        fi
+        echo
+    done
+
+    log_step "Completed section: $section"
+    echo
 done
+
+log_success "Environment setup complete 🎉"
