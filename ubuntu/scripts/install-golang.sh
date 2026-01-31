@@ -5,7 +5,7 @@ if [[ $(id -u) -eq 0 ]]; then
     exit
 fi
 
-go_version="1.24.2"
+go_version="1.25.6"
 go_url="https://go.dev/dl/go${go_version}.linux-amd64.tar.gz"
 go_file="./go${go_version}.linux-amd64.tar.gz"
 go_root="/usr/local"
