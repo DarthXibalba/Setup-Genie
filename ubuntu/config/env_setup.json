@@ -9,10 +9,15 @@
     "OPTIONAL": [
       "scripts/install-golang.sh",
       "scripts/install-golangci-lint.sh",
-      "scripts/install-python3.sh",
+      "scripts/install-python3.sh"
+    ]
+  },
+  "containers": {
+    "REQUIRED": [
       "scripts/install-container-runtime.sh",
       "scripts/install-nerdctl.sh"
-    ]
+    ],
+    "OPTIONAL": []
   },
   "ubuntu": {
     "REQUIRED": [
@@ -21,10 +26,22 @@
     ],
     "OPTIONAL": [
       "scripts/install-ubuntu-nvidia-drivers.sh",
-      "scripts/install-aws-cli-v2.sh",
-      "scripts/install-trivy.sh",
+      "scripts/install-kvm-qemu-virtmanager.sh",
       "scripts/install-rust-desk-client.sh",
-      "scripts/install-zoom-client.sh"
+      "scripts/install-zoom-client.sh",
+      "scripts/install-aws-cli-v2.sh",
+      "scripts/install-trivy.sh"
+    ]
+  },
+  "ubuntu-vm": {
+    "REQUIRED": [
+      "scripts/install-vscode.sh",
+      "scripts/install-google-chrome.sh"
+    ],
+    "OPTIONAL": [
+      "scripts/install-rust-desk-client.sh",
+      "scripts/install-aws-cli-v2.sh",
+      "scripts/install-trivy.sh"
     ]
   },
   "wsl": {
@@ -40,15 +57,5 @@
       "scripts/install-git-repos.sh@personal"
     ],
     "OPTIONAL": []
-  },
-  "work": {
-    "REQUIRED": [
-      "scripts/install-git.sh@work",
-      "scripts/install-git-repos.sh@work",
-      "scripts/write-hooh-file.sh"
-    ],
-    "OPTIONAL": [
-      "scripts/install-git-repos.sh@containerd"
-    ]
   }
 }
