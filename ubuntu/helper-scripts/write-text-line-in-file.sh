@@ -10,6 +10,12 @@ fi
 filename=$1
 text_to_write=$2
 
+# Check that file exists
+if [ ! -f "$filename" ]; then
+    echo "ERROR: filename not found at: $filename"
+    exit 1
+fi
+
 # Check if text already exists
 if grep -Fxq "$text_to_write" "$filename"; then
     echo "$text_to_write already exists in $filename. No changes made."

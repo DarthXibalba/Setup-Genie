@@ -8,6 +8,7 @@ set -e
 script_dir="$(dirname "$(realpath "$0")")"
 apt_get_install="$script_dir/../helper-scripts/apt-get-install.sh"
 logging_file="$script_dir/../helper-scripts/logging.sh"
+write_line="$script_dir/../helper-scripts/write-text-line-in-file.sh"
 
 if [ ! -f "$logging_file" ]; then
     echo "ERROR: logging helper not found at: $logging_file"
@@ -18,7 +19,12 @@ fi
 source "$logging_file"
 
 if [ ! -f "$apt_get_install" ]; then
-    log_error "ERROR: apt-get helper not found at: $apt_get_install"
+    log_error "apt-get helper not found at: $apt_get_install"
+    exit 1
+fi
+
+if [ ! -f "$write_line" ]; then
+    log_error "write_line_in_file helper not found at: $write_line"
     exit 1
 fi
 
@@ -31,6 +37,9 @@ $apt_get_install qemu-kvm libvirt-daemon-system virt-manager virt-viewer
 
 # Allow the current user to manage libvirt VMs without sudo
 sudo usermod -aG libvirt $USER
+
+# Append to bash aliases
+$write_line ~/.bash_aliases "alias runremoteviewer='remote-viewer spice://localhost:5900'"
 
 log_info "Installation complete."
 log_info "You must log out or reboot for libvirt group changes to take effect."
