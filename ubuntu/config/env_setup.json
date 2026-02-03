@@ -34,7 +34,7 @@
       "scripts/install-trivy.sh"
     ]
   },
-  "ubuntu-vm": {
+  "ubuntu_vm": {
     "REQUIRED": [
       "scripts/install-vscode.sh",
       "scripts/install-google-chrome.sh"
