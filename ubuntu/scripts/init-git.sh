@@ -1,4 +1,11 @@
 #!/bin/bash
+# TODO:
+# allow for multiple ssh key generations based on section (valid_flags)
+# i.e. id_ed25519_personal.pub, id_ed25519_work.pub
+
+# TODO:
+# add workingdirectory to gitconfig.json to each section
+# init-git.sh can mkdir it and clone-git-repos.sh can clone to that directory
 set -euo pipefail
 
 # -----------------------------
@@ -11,15 +18,24 @@ config_file="$script_dir/../config/gitconfig.json"
 # -----------------------------
 # Config
 # -----------------------------
-valid_flags=("personal" "work" "containerd")
 ssh_key="$HOME/.ssh/id_ed25519"
 ssh_pub="${ssh_key}.pub"
+
+# -----------------------------
+# Detect valid profiles from config
+# -----------------------------
+mapfile -t valid_flags < <(jq -r 'keys[]' "$config_file")
+
+if [[ ${#valid_flags[@]} -eq 0 ]]; then
+    echo "Error: No profiles found in $config_file"
+    exit 1
+fi
 
 # -----------------------------
 # Helpers
 # -----------------------------
 usage() {
-    echo "Usage: $0 [${valid_flags[*]}]"
+    echo "Usage: $0 [$(printf "%s | " "${valid_flags[@]}" | sed 's/ | $//')]"
     exit 1
 }
 
