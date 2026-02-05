@@ -3,9 +3,6 @@
 # allow for multiple ssh key generations based on section (valid_flags)
 # i.e. id_ed25519_personal.pub, id_ed25519_work.pub
 
-# TODO:
-# add workingdirectory to gitconfig.json to each section
-# init-git.sh can mkdir it and clone-git-repos.sh can clone to that directory
 set -euo pipefail
 
 # -----------------------------
@@ -87,9 +84,15 @@ sudo apt-get install -y wl-clipboard xclip 2>/dev/null || true
 # -----------------------------
 username="$(jq -r ".${profile}.USERNAME // empty" "$config_file")"
 email="$(jq -r ".${profile}.EMAIL // empty" "$config_file")"
+localpath="$(jq -r ".${profile}.LOCALPATH // empty" "$config_file")"
 
 if [[ -z "$username" || -z "$email" ]]; then
     echo "Error: USERNAME or EMAIL missing in [$profile] config"
+    exit 1
+fi
+
+if [[ -z "$localpath" ]]; then
+    echo "Error: LOCALPATH missing in [$profile] config"
     exit 1
 fi
 
@@ -102,6 +105,16 @@ git config --global init.defaultBranch main
 
 echo "Git configured:"
 git config --global --list | grep -E 'user.name|user.email|init.defaultBranch'
+
+# -----------------------------
+# Create LOCALPATH
+# -----------------------------
+expanded_localpath="$(eval echo "$localpath")"
+
+mkdir -p "$expanded_localpath"
+chmod 755 "$expanded_localpath"
+
+echo "Workspace directory ensured: $expanded_localpath"
 
 # -----------------------------
 # SSH key setup
