@@ -54,8 +54,8 @@
   },
   "personal": {
     "REQUIRED": [
-      "scripts/install-git.sh@personal",
-      "scripts/install-git-repos.sh@personal"
+      "scripts/init-git.sh@personal",
+      "scripts/clone-git-repos.sh@personal"
     ],
     "OPTIONAL": []
   }
