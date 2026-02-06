@@ -56,3 +56,22 @@ installed:
 - scripts/install-vscode.sh (+extensions)
 - scripts/install-google-chrome.sh (+sign in)
 - scripts/install-rust-desk-client.sh
+
+### Base_v0.0.5:
+- Google Drive sign in
+- Display resolution
+- Dual display resolution
+
+### Base_v0.0.6:
+- init-git.sh & Github SSH key creation
+
+### Dev_v1.0.0: System updates 20260205
+- Ubuntu system updates
+
+
+### TODO
+#### fix NVIDIA Ubuntu Drivers install
+#### dev_nvidia v1.0.0: NVIDIA passthru & drivers install
+#### fix containers install
+#### dev_ctrs v1.0.0: containerd
+#### dev_nvidia_ctrs v1.0.0: NVIDIA child + containerd
