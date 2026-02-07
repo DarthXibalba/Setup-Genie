@@ -68,6 +68,9 @@ installed:
 ### Dev_v1.0.0: System updates 20260205
 - Ubuntu system updates
 
+### Dev_v1.0.1: Grow Root
+- /usr/local/sbin/anvil-grow-root.sh
+
 
 ### TODO
 #### fix NVIDIA Ubuntu Drivers install
