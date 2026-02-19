@@ -71,6 +71,18 @@ installed:
 ### Dev_v1.0.1: Grow Root
 - /usr/local/sbin/anvil-grow-root.sh
 
+### Dev_v1.0.2: ProtoVPN
+
+### Dev_v1.0.3: LinkedIn & Outlook sign in
+
+### Dev_v1.0.4: Pinned ProtonVPN to Dock
+
+### Dev_v1.0.5:
+- Pinned System Monitor to dock
+- Changed Power Settings to 15 minute Delay
+- Changed Desktop wallpaper
+- System Updates 20260210
+
 
 ### TODO
 #### fix NVIDIA Ubuntu Drivers install
