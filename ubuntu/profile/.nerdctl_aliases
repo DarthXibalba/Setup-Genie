@@ -1,0 +1,72 @@
+alias showNerdctlAliases='cat ~/.nerdctl_aliases'
+
+NCTL_SOCK_ADDRESS="/run/containerd/containerd.sock"
+NCTL_NAMESPACE="myspace"
+NCTL_CMD="sudo env \"PATH=$PATH\" nerdctl --address $NCTL_SOCK_ADDRESS --namespace $NCTL_NAMESPACE"
+
+# Catch all alias to run any other nerdctl cmds not listed here
+alias nerdctl="$NCTL_CMD"
+
+# List info
+alias nerdctlPs="$NCTL_CMD ps"
+alias nerdctlCtrs="$NCTL_CMD ps"
+alias nerdctlImages="$NCTL_CMD images"
+
+# Images: Building & Saving
+alias _nctlBuild="$NCTL_CMD build"
+nerdctlBuildImage() {
+    local tag="$1"
+    local file="$2"
+    if [[ -z "$tag" || -z "$file" ]]; then
+        echo "Error: You must specify both a tag and a Dockerfile."
+        echo "Usage: phxBuildImage <tag> <file>"
+        return 1
+    fi
+    _nctlBuild -t "$tag" -f "$file" .
+}
+
+alias _nctlImageSave="$NCTL_CMD image save"
+nerdctlImageSave() {
+    local image="$1"
+    local path="$2"
+    if [[ -z "$image" || -z "$path" ]]; then
+        echo "Error: You must specify the image to save and a path to save it to (recommend to save it as .tar)"
+        echo "Usage: phxImageSave <image> <path>"
+        return 1
+    fi
+    _nctlImageSave "$image" -o "$path"
+}
+
+# Containers: Exec, Run, Run Interactive Terminal, Run Interactive Bash
+alias nerdctlExec="$NCTL_CMD container exec -it"
+alias nerdctlRun="$NCTL_CMD container run"
+alias nerdctlRunIt="$NCTL_CMD container run -it"
+
+nerdctlRunItBash() {
+    local image="$1"
+    if [[ -z "$image" ]]; then
+        echo "Error: You must specify an image name."
+        echo "Usage: phxRunItBash <image>"
+        return 1
+    fi
+    nerdctlRunIt "$image" /bin/bash
+}
+
+# Containers: Create, Start, Stop, Prune
+alias nerdctlCreate="$NCTL_CMD container create"
+alias nerdctlStart="$NCTL_CMD container start"
+alias nerdctlStop="$NCTL_CMD container stop"
+alias nerdctlPrune="$NCTL_CMD container prune --force"
+
+nerdctlStopAll() {
+    local container_ids=$(nerdctlCtrs --quiet)
+    for id in $container_ids; do
+        nerdctlStop "$id"
+    done
+}
+
+nerdctlWipe() {
+    nerdctlStopAll
+    nerdctlPrune
+}
+
