@@ -19,7 +19,7 @@ nerdctlBuildImage() {
     local file="$2"
     if [[ -z "$tag" || -z "$file" ]]; then
         echo "Error: You must specify both a tag and a Dockerfile."
-        echo "Usage: phxBuildImage <tag> <file>"
+        echo "Usage: nerdctlBuildImage <tag> <file>"
         return 1
     fi
     _nctlBuild -t "$tag" -f "$file" .
@@ -31,7 +31,7 @@ nerdctlImageSave() {
     local path="$2"
     if [[ -z "$image" || -z "$path" ]]; then
         echo "Error: You must specify the image to save and a path to save it to (recommend to save it as .tar)"
-        echo "Usage: phxImageSave <image> <path>"
+        echo "Usage: nerdctlImageSave <image> <path>"
         return 1
     fi
     _nctlImageSave "$image" -o "$path"
@@ -46,7 +46,7 @@ nerdctlRunItBash() {
     local image="$1"
     if [[ -z "$image" ]]; then
         echo "Error: You must specify an image name."
-        echo "Usage: phxRunItBash <image>"
+        echo "Usage: nerdctlRunItBash <image>"
         return 1
     fi
     nerdctlRunIt "$image" /bin/bash
