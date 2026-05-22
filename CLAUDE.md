@@ -56,6 +56,27 @@ Every install script sources `helper-scripts/logging.sh` for colorized output an
 - **Deprecated scripts**: Move to `ubuntu/legacy/` rather than deleting
 - **Secrets**: `gitconfig.json` (real credentials) is gitignored — only `gitconfig_template.json` is tracked
 
+## Install Script Standard
+
+All `ubuntu/scripts/install-*.sh` files **must** follow the pattern in [`ubuntu/scripts/install-TEMPLATE.sh`](ubuntu/scripts/install-TEMPLATE.sh).
+**Copy that file as the starting point for every new install script.** Delete the comment scaffolding as you fill it in.
+
+Key rules (all enforced by the template):
+- `#!/bin/bash` + `set -e` — no exceptions
+- Resolve helper paths relative to `script_dir` via `dirname "$(realpath "$0")"` — never hardcode paths
+- Validate **logging.sh first** with plain `echo` (logger not sourced yet), then use `log_error` for every subsequent check
+- `# shellcheck source=/dev/null` on every `source` line
+- All package installs via `$apt_get_install` — **never raw `apt-get`**
+- Section headers always use the `# =========================` / `# TITLE` / `# =========================` delimiter style
+- Add idempotency guards wherever practical (version string match, `command -v`, or `[ ! -f ]` for config files / GPG keys)
+- Logging via `log_info` / `log_warn` / `log_error` / `log_success` / `log_step` from logging.sh
+- End every script with a **Post-install notes** section: `log_success` confirmation + `log_info` verify/test commands + `##` block for manual first-run steps
+
+Reference examples (all in `ubuntu/scripts/`):
+- `install-nerdctl.sh` — version-string idempotency guard, download + extract pattern, systemd service check
+- `install-proton-vpn.sh` — GPG key + APT repo guards, multi-step dependency pattern
+- `install-kvm-qemu-virtmanager.sh` — group membership, dotfile alias append, extensive post-install workflow docs
+
 ## Change Tracking
 
 `golden-image-change-log.md` documents VM snapshot versions (Base → Dev) and records which tools were installed in each snapshot. Update this file when adding new install scripts that change the golden image state.
