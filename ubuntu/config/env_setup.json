@@ -14,6 +14,15 @@
       "scripts/install-nerdctl.sh"
     ]
   },
+  "media": {
+    "REQUIRED": [
+      "scripts/install-vlc.sh",
+      "scripts/install-gimp.sh"
+    ],
+    "OPTIONAL": [
+      "scripts/install-obs-studio.sh"
+    ]
+  },
   "ubuntu": {
     "REQUIRED": [
       "scripts/install-vscode.sh",
@@ -25,17 +34,6 @@
       "scripts/install-rust-desk-client.sh",
       "scripts/install-zoom-client.sh",
       "scripts/install-veracrypt.sh",
-      "scripts/install-aws-cli-v2.sh",
-      "scripts/install-trivy.sh"
-    ]
-  },
-  "ubuntu_vm": {
-    "REQUIRED": [
-      "scripts/install-vscode.sh",
-      "scripts/install-google-chrome.sh"
-    ],
-    "OPTIONAL": [
-      "scripts/install-rust-desk-client.sh",
       "scripts/install-aws-cli-v2.sh",
       "scripts/install-trivy.sh"
     ]
