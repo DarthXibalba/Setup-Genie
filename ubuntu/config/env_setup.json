@@ -15,9 +15,9 @@
   },
   "containers": {
     "REQUIRED": [
+      "scripts/install-docker.sh"
     ],
     "OPTIONAL": [
-      "scripts/install-docker.sh",
       "scripts/install-nerdctl.sh"
     ]
   },
