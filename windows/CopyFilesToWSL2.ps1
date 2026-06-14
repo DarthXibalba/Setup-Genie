@@ -1,8 +1,8 @@
 # Define the array of accepted OS flags
 $acceptedWSLDistros = @(
     'Ubuntu',
-    'Ubuntu-20.04',
-    'Ubuntu-22.04'
+    'Ubuntu-22.04',
+    'Ubuntu-24.04'
 )
 
 # Define the array of items to copy
@@ -46,6 +46,11 @@ $LinuxCarriageReturnScript = "/tmp/remove-carriage-returns.sh"
 $LinuxCarriageReturnScriptTmp = "/tmp/remove-carriage-returns-tmp.sh"
 $WslCarriageReturnScriptTmp = Join-Path -Path $WslDistroPath -ChildPath ($LinuxCarriageReturnScriptTmp -replace "/", "\")
 $WindowsCarriageReturnScript = Join-Path -Path $UbuntuSetupGeniePath -ChildPath "helper-scripts/remove-carriage-returns.sh"
+
+$LinuxLoggingScript = "/tmp/logging.sh"
+$LinuxLoggingScriptTmp = "/tmp/logging-tmp.sh"
+$WslLoggingScriptTmp = Join-Path -Path $WslDistroPath -ChildPath ($LinuxLoggingScriptTmp -replace "/", "\")
+$WindowsLoggingScript = Join-Path -Path $UbuntuSetupGeniePath -ChildPath "helper-scripts/logging.sh"
 
 # ----- ----- ----- Define Functions ----- ----- ----- #
 function Cleanup-Environment {
@@ -118,6 +123,10 @@ function Prepare-Environment {
     Copy-Item -Path $WindowsCarriageReturnScript -Destination $WslCarriageReturnScriptTmp -Force
     Exec-InWslDistro -Cmd "tr -d '\r' < `"$LinuxCarriageReturnScriptTmp`" > `"$LinuxCarriageReturnScript`""
     Exec-InWslDistro -Cmd "chmod +x $LinuxCarriageReturnScript"
+
+    Copy-Item -Path $WindowsLoggingScript -Destination $WslLoggingScriptTmp -Force
+    Exec-InWslDistro -Cmd "tr -d '\r' < `"$LinuxLoggingScriptTmp`" > `"$LinuxLoggingScript`""
+    Exec-InWslDistro -Cmd "chmod +x $LinuxLoggingScript"
 
     Create-DirectoryIfDoesNotExist -DirPath $WslDestinationPathTmp
     Create-DirectoryIfDoesNotExist -DirPath $WslDestinationPathFinal
