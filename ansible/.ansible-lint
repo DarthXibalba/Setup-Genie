@@ -1,0 +1,10 @@
+---
+# ansible-lint configuration.
+# Start at the 'moderate' profile; graduate toward 'production' as roles mature
+# (production  enforces fully-qualified module names, naming conventions,
+# idempotency hints, etc.).
+profile: moderate
+
+exclude_paths:
+  - .github/
+  - ../ubuntu/legacy/

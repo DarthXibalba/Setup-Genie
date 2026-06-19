@@ -1,0 +1,28 @@
+---
+# =============================================================================
+# site.yml — master playbook
+# =============================================================================
+# Phase 0: a no-op connectivity + scaffold smoke test. Later phases add
+# `import_playbook:` lines for each section (devtools, containers, media,
+# ubuntu_desktop, wsl, personal).
+# =============================================================================
+- name: Setup-Genie — connectivity & scaffold smoke test
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Confirm Ansible can reach this host
+      ansible.builtin.ping:
+
+    - name: Show target context
+      ansible.builtin.debug:
+        msg: >-
+          Connected to {{ inventory_hostname }}
+          ({{ ansible_distribution | default('unknown') }}
+          {{ ansible_distribution_version | default('') }})
+          as {{ ansible_user_id | default('?') }};
+          target_user={{ target_user }};
+          enabled_optional={{ enabled_optional }}
+
+# Phase 1+ will append, e.g.:
+# - import_playbook: playbooks/devtools.yml
+# - import_playbook: playbooks/containers.yml

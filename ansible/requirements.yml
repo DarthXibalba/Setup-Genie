@@ -1,0 +1,19 @@
+---
+# Galaxy collections required by Setup-Genie roles.
+# Install with:  ansible-galaxy collection install -r requirements.yml
+# (bootstrap/bootstrap.sh does this for you.)
+#
+# Version floors guarantee the modules we rely on exist; bump as needed.
+collections:
+  # git_config, ini_file, and other general-purpose modules
+  - name: community.general
+    version: ">=8.0.0"
+  # openssh_keypair (per-profile SSH key generation in the git_profiles role)
+  - name: community.crypto
+    version: ">=2.10.0"
+  # profile_tasks callback (timing/output) and posix helpers
+  - name: ansible.posix
+    version: ">=1.5.0"
+
+# Note: ansible.builtin.deb822_repository (used for third-party apt repos in
+# later phases) ships with ansible-core >= 2.15 — no collection needed.
