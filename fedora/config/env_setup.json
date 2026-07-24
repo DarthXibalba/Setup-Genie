@@ -1,0 +1,9 @@
+{
+  "personal": {
+    "REQUIRED": [
+      "scripts/init-git.sh@personal",
+      "scripts/clone-git-repos.sh@personal"
+    ],
+    "OPTIONAL": []
+  }
+}
