@@ -1,14 +1,13 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 # =========================
 # Helper scripts
 # =========================
 
 script_dir="$(dirname "$(realpath "$0")")"
-apt_get_install="$script_dir/../helper-scripts/apt-get-install.sh"
 logging_file="$script_dir/../helper-scripts/logging.sh"
-write_line="$script_dir/../helper-scripts/write-text-line-in-file.sh"
+snap_install="$script_dir/../helper-scripts/snap-install.sh"
 
 if [ ! -f "$logging_file" ]; then
     echo "ERROR: logging helper not found at: $logging_file"
@@ -18,13 +17,8 @@ fi
 # shellcheck source=/dev/null
 source "$logging_file"
 
-if [ ! -f "$apt_get_install" ]; then
-    log_error "apt-get helper not found at: $apt_get_install"
-    exit 1
-fi
-
-if [ ! -f "$write_line" ]; then
-    log_error "write_line_in_file helper not found at: $write_line"
+if [ ! -f "$snap_install" ]; then
+    log_error "Snap install helper not found at: $snap_install"
     exit 1
 fi
 
@@ -32,40 +26,33 @@ fi
 # Proton VPN installation
 # =========================
 
-log_info "Installing Proton VPN dependencies..."
-$apt_get_install wget gpg apt-transport-https ca-certificates
+# Refuse to layer the Snap over an existing native APT installation. Leaving
+# those packages installed would preserve the system-Python dependencies that
+# this installation method is intended to avoid.
+native_packages=()
+while IFS=$'\t' read -r package status; do
+    package_without_arch="${package%%:*}"
+    if [[ "$status" == "ii "* ]] &&
+       [[ "$package_without_arch" =~ ^(proton-vpn($|-)|protonvpn($|-)|python3-proton-vpn($|-)|python3-protonvpn-nm-lib$) ]]; then
+        native_packages+=("$package")
+    fi
+done < <(dpkg-query -W -f='${binary:Package}\t${db:Status-Abbrev}\n' 2>/dev/null || true)
 
-KEYRING_PATH="/usr/share/keyrings/protonvpn-archive-keyring.gpg"
-REPO_LIST="/etc/apt/sources.list.d/protonvpn.list"
-
-if [ ! -f "$KEYRING_PATH" ]; then
-    log_info "Adding Proton VPN GPG key..."
-    wget -qO- https://repo.protonvpn.com/debian/public_key.asc \
-        | gpg --dearmor \
-        | sudo tee "$KEYRING_PATH" > /dev/null
-else
-    log_info "Proton VPN GPG key already present"
+if [ "${#native_packages[@]}" -gt 0 ]; then
+    log_error "Native APT-installed Proton VPN packages are still present:"
+    printf '  %s\n' "${native_packages[@]}"
+    log_info "Remove them first with: $script_dir/remove-proton-vpn.sh"
+    exit 1
 fi
 
-if [ ! -f "$REPO_LIST" ]; then
-    log_info "Adding Proton VPN APT repository..."
-    echo "deb [signed-by=$KEYRING_PATH] https://repo.protonvpn.com/debian stable main" \
-        | sudo tee "$REPO_LIST" > /dev/null
-else
-    log_info "Proton VPN APT repository already present"
-fi
-
-log_info "Updating APT metadata..."
-sudo apt update
-
-log_info "Installing Proton VPN desktop client..."
-$apt_get_install proton-vpn-gnome-desktop
+log_info "Installing the confined Proton VPN Snap..."
+"$snap_install" proton-vpn
 
 # =========================
 # Post-install notes
 # =========================
 
-log_info "Proton VPN installation complete."
-log_info "Launch the app with: protonvpn-app"
+log_success "Proton VPN installation complete."
+log_info "Launch Proton VPN from the desktop application menu."
 log_info "You must sign in with your Proton account on first launch."
-
+log_warn "The Snap sandbox does not support every feature available in Proton's native APT app."
