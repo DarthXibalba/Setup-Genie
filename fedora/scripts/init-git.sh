@@ -5,7 +5,7 @@ set -euo pipefail
 # Paths
 # -----------------------------
 script_dir="$(dirname "$(realpath "$0")")"
-apt_get_install="$script_dir/../helper-scripts/apt-get-install.sh"
+dnf_install="$script_dir/../helper-scripts/dnf-install.sh"
 config_file="$script_dir/../config/gitconfig.json"
 
 # -----------------------------
@@ -60,10 +60,10 @@ fi
 # -----------------------------
 # Install dependencies
 # -----------------------------
-$apt_get_install git jq openssh-client
+"$dnf_install" git jq openssh-clients
 
 # Optional clipboard helpers (best-effort)
-sudo apt-get install -y wl-clipboard xclip >/dev/null 2>&1 || true
+sudo dnf install -y wl-clipboard xclip >/dev/null 2>&1 || true
 
 # -----------------------------
 # Read config values

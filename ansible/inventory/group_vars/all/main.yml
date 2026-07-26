@@ -1,0 +1,20 @@
+---
+# =============================================================================
+# group_vars/all/main.yml — non-secret defaults for every host
+# =============================================================================
+
+# The login/target user that user-scoped tasks (ssh keys, dotfiles, git) act on.
+# Defaults to the connecting user; override per-host if needed.
+target_user: "{{ ansible_user_id }}"
+
+# Declarative REQUIRED/OPTIONAL control.
+# REQUIRED roles always run. OPTIONAL roles run only when their name is listed
+# here (see the plan's section→role mapping). Empty for the Phase 0 scaffold.
+enabled_optional: []
+
+# Pinned tool versions (consumed by roles in later phases).
+go_version: "1.25.6"
+nerdctl_version: "2.2.2"
+
+# Secret values (github_pat, git identities) are introduced in Phase 4 via
+# vars.yml + an ansible-vault encrypted vault.yml in this same directory.

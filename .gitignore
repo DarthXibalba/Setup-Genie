@@ -12,3 +12,9 @@ setup-files/
 # Secrets
 *secrets*
 gitconfig.json
+
+# Ansible
+.vault_pass
+*.retry
+ansible/collections/
+

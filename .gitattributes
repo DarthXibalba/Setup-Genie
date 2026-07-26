@@ -1,0 +1,20 @@
+# Normalize line endings repo-wide. This retires the carriage-return tooling
+# (remove-carriage-returns.sh / CopyFilesToWSL2.ps1) for the Ansible side:
+# files are authored once and checked out with consistent endings.
+* text=auto eol=lf
+
+# Shell, Ansible, and config files are always LF.
+*.sh   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.cfg  text eol=lf
+
+# PowerShell stays CRLF (Windows convention).
+*.ps1 text eol=crlf
+
+# Binaries — never normalize.
+*.deb    binary
+*.tar.gz binary
+*.exe    binary
+*.gpg    binary
