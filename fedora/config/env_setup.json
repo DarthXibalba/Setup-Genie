@@ -3,7 +3,9 @@
     "REQUIRED": [
       "scripts/setup-bash-profile.sh"
     ],
-    "OPTIONAL": []
+    "OPTIONAL": [
+      "scripts/install-golangci-lint.sh"
+    ]
   },
   "personal": {
     "REQUIRED": [
