@@ -38,7 +38,7 @@ Every install script sources `helper-scripts/logging.sh` for colorized output an
 - `ubuntu/config/env_setup.json` — maps section names → ordered script lists (REQUIRED/OPTIONAL)
 - `ubuntu/config/gitconfig.json` — git profiles (personal/work) with USERNAME, EMAIL, LOCALPATH, and repo lists; **excluded from git** since it contains credentials
 
-**Profile files** (`ubuntu/profile/`) are symlinked/copied to `$HOME` during setup. `.nerdctl_aliases` wraps nerdctl with a fixed namespace and socket for container operations.
+**Bash aliases** are written to `~/.bash_aliases` by `ubuntu/scripts/setup-bash-profile.sh` during setup.
 
 ### Windows Side
 

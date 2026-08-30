@@ -1,46 +1,41 @@
 #!/bin/bash
+set -euo pipefail
 
-# Get the absolute path of the script directory
 script_dir="$(dirname "$(realpath "$0")")"
-profile_dir="$script_dir/../profile"
-rm_carriage_rtn="$script_dir/../helper-scripts/remove-carriage-returns.sh"
+logging_file="$script_dir/../helper-scripts/logging.sh"
 
-idx=0
-filesSrc=()
-filesTmp=()
-filesDst=()
-tmp_dir="$profile_dir/tmp"
-dst_dir="$HOME"
-
-# Check if the profile directory exists
-if [ ! -d "$profile_dir" ]; then
-    echo "Error: Profile directory does not exist at $profile_dir"
+if [ ! -f "$logging_file" ]; then
+    echo "ERROR: logging helper not found at: $logging_file"
     exit 1
 fi
 
-# Loop through all files in profile_dir and add to filesSrc and filesDst
-while IFS= read -r -d '' file; do
-    filesSrc[idx]="$file"
-    filesTmp[idx]="${file/$profile_dir/$tmp_dir}"
-    filesDst[idx]="${file/$profile_dir/$dst_dir}"
-    ((idx++))
-done < <(find "$profile_dir" -type f -print0)
+# shellcheck source=/dev/null
+source "$logging_file"
 
-# Remove carriage return artifacts due to cross-platform (Windows) development
-mkdir "$tmp_dir"
-for ((i = 0; i < ${#filesSrc[@]}; i++)); do
-    echo "$rm_carriage_rtn ${filesSrc[i]} ${filesTmp[i]}"
-    "$rm_carriage_rtn" "${filesSrc[i]}" "${filesTmp[i]}"
-done
+bash_aliases_file="$HOME/.bash_aliases"
 
-# Move profile files to $HOME
-for ((i = 0; i < ${#filesTmp[@]}; i++)); do
-    echo "mv ${filesTmp[i]} ${filesDst[i]}"
-    mv "${filesTmp[i]}" "${filesDst[i]}"
-done
+read -r -d '' alias_content <<'EOF' || true
+# Setup-Genie managed aliases
+alias gitadd='git add'
+alias gitbranch='git branch'
+alias gitcheckout='git checkout'
+alias gitcommit='git commit -m'
+alias gitdiff='git diff'
+alias gitfetch='git fetch'
+alias gitfetchoriginprune='git fetch origin -p'
+alias gitlog='git log'
+alias gitpull='git pull'
+alias gitpush='git push'
+alias gitstatus='git status'
+alias la='ls -lah'
+alias makelist="make -qp | awk -F':' '/^[a-zA-Z0-9][^#\/\t=]*:([^=]|\$)/ {split(\$1,A,/ /); for(i in A) print A[i]}' | sort -u"
+EOF
 
-# Cleanup and exit
-rm -rf "$tmp_dir"
-echo "Deleted $tmp_dir"
-echo "Copied bash profile."
-echo "Please run $ source ~/.bashrc to reload profile"
+cat > "$bash_aliases_file" <<EOF
+$alias_content
+EOF
+
+chmod 644 "$bash_aliases_file"
+
+log_success "Wrote Setup-Genie aliases to $bash_aliases_file"
+log_success "Bash profile setup complete"
