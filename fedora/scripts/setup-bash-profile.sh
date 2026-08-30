@@ -16,17 +16,20 @@ bashrcd_dir="$HOME/.bashrc.d"
 bashrcd_file="$bashrcd_dir/setup-genie-aliases.sh"
 
 read -r -d '' alias_content <<'EOF' || true
+# Setup-Genie managed aliases
 alias gitadd='git add'
+alias gitbranch='git branch'
+alias gitcheckout='git checkout'
 alias gitcommit='git commit -m'
 alias gitdiff='git diff'
+alias gitfetch='git fetch'
+alias gitfetchoriginprune='git fetch origin -p'
 alias gitlog='git log'
 alias gitpull='git pull'
-alias gitpullorigin='git pull origin'
-alias gitpulloriginmain='git pull origin main'
-alias gitpushorigin='git push'
-alias gitpushoriginmain='git push origin main'
+alias gitpush='git push'
 alias gitstatus='git status'
 alias la='ls -lah'
+alias makelist="make -qp | awk -F':' '/^[a-zA-Z0-9][^#\/\t=]*:([^=]|\$)/ {split(\$1,A,/ /); for(i in A) print A[i]}' | sort -u"
 EOF
 
 mkdir -p "$bashrcd_dir"
