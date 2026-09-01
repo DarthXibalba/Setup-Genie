@@ -9,6 +9,7 @@
     "OPTIONAL": [
       "scripts/install-golang.sh",
       "scripts/install-golangci-lint.sh",
+      "scripts/install-gh.sh",
       "scripts/install-python3.sh",
       "scripts/install-proton-vpn.sh",
       "scripts/install-postman.sh"

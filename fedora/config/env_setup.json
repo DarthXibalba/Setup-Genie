@@ -4,7 +4,8 @@
       "scripts/setup-bash-profile.sh"
     ],
     "OPTIONAL": [
-      "scripts/install-golangci-lint.sh"
+      "scripts/install-golangci-lint.sh",
+      "scripts/install-gh.sh"
     ]
   },
   "personal": {
