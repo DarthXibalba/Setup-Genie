@@ -27,6 +27,10 @@ alias gitlog='git log'
 alias gitpull='git pull'
 alias gitpush='git push'
 alias gitstatus='git status'
+# CNCF
+alias awscheckloginstatus='aws sts get-caller-identity'
+alias ghcheckloginstatus='gh auth status'
+# Misc
 alias la='ls -lah'
 alias makelist="make -qp | awk -F':' '/^[a-zA-Z0-9][^#\/\t=]*:([^=]|\$)/ {split(\$1,A,/ /); for(i in A) print A[i]}' | sort -u"
 EOF
