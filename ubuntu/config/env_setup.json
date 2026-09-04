@@ -7,9 +7,11 @@
       "scripts/install-tools-networking.sh"
     ],
     "OPTIONAL": [
+      "scripts/install-aws-cli-v2.sh",
       "scripts/install-golang.sh",
       "scripts/install-golangci-lint.sh",
       "scripts/install-gh.sh",
+      "scripts/install-terraform.sh",
       "scripts/install-python3.sh",
       "scripts/install-proton-vpn.sh",
       "scripts/install-postman.sh"

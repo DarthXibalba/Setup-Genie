@@ -12,6 +12,7 @@ setup-files/
 # Secrets
 *secrets*
 gitconfig.json
+github-recovery-codes.txt
 
 # Ansible
 .vault_pass

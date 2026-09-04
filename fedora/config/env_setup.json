@@ -4,8 +4,10 @@
       "scripts/setup-bash-profile.sh"
     ],
     "OPTIONAL": [
+      "scripts/install-aws-cli-v2.sh",
       "scripts/install-golangci-lint.sh",
-      "scripts/install-gh.sh"
+      "scripts/install-gh.sh",
+      "scripts/install-terraform.sh"
     ]
   },
   "personal": {
