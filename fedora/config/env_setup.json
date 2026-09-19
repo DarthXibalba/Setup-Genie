@@ -4,6 +4,7 @@
       "scripts/setup-bash-profile.sh"
     ],
     "OPTIONAL": [
+      "scripts/install-nodejs.sh",
       "scripts/install-aws-cli-v2.sh",
       "scripts/install-golangci-lint.sh",
       "scripts/install-gh.sh",

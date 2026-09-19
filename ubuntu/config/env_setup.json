@@ -7,6 +7,7 @@
       "scripts/install-tools-networking.sh"
     ],
     "OPTIONAL": [
+      "scripts/install-nodejs.sh",
       "scripts/install-aws-cli-v2.sh",
       "scripts/install-golang.sh",
       "scripts/install-golangci-lint.sh",
