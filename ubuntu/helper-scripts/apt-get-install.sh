@@ -31,13 +31,18 @@ fi
 # Install packages
 # =========================
 
+missing_packages=()
 for package_name in "$@"; do
-    if ! command -v "$package_name" &>/dev/null; then
-        log_step "Installing $package_name..."
-        sudo apt-get update -qq
-        sudo apt-get install "$package_name" -y
-        log_success "$package_name installed."
+    if [ "$(dpkg-query -W -f='${Status}' "$package_name" 2>/dev/null)" != "install ok installed" ]; then
+        missing_packages+=("$package_name")
     else
         log_info "$package_name is already installed. Skipping."
     fi
 done
+
+if [ ${#missing_packages[@]} -gt 0 ]; then
+    log_step "Installing ${missing_packages[*]}..."
+    sudo apt-get update -qq
+    sudo apt-get install -y "${missing_packages[@]}"
+    log_success "Packages installed: ${missing_packages[*]}"
+fi

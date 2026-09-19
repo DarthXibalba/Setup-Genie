@@ -65,6 +65,29 @@ if [ -z "$ubuntu_codename" ]; then
 fi
 
 # =========================
+# HashiCorp repository
+# =========================
+
+log_step "Installing Terraform repository prerequisites..."
+"$apt_get_install" ca-certificates gnupg wget
+
+keyring_path="/usr/share/keyrings/hashicorp-archive-keyring.gpg"
+repo_list="/etc/apt/sources.list.d/hashicorp.list"
+
+if [ ! -f "$repo_list" ]; then
+    log_step "Adding HashiCorp's official APT repository..."
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=${keyring_path}] https://apt.releases.hashicorp.com ${ubuntu_codename} main" \
+        | sudo tee "$repo_list" > /dev/null
+
+    log_success "HashiCorp repository added."
+else
+    log_info "HashiCorp APT repository already configured."
+fi
+
+# Refresh the key even when Terraform is already installed.
+bash "$script_dir/repair-hashicorp-apt-key.sh"
+
+# =========================
 # Idempotency guard
 # =========================
 
@@ -77,42 +100,6 @@ if command -v terraform &>/dev/null; then
 
     log_error "An existing terraform executable failed its version check."
     exit 1
-fi
-
-# =========================
-# HashiCorp repository
-# =========================
-
-log_step "Installing Terraform repository prerequisites..."
-"$apt_get_install" ca-certificates gnupg wget
-
-keyring_path="/usr/share/keyrings/hashicorp-archive-keyring.gpg"
-repo_list="/etc/apt/sources.list.d/hashicorp.list"
-
-if [ ! -f "$keyring_path" ]; then
-    log_step "Adding HashiCorp's package-signing key..."
-    key_tmp="$(mktemp /tmp/hashicorp-key.XXXXXX)"
-    keyring_tmp="$(mktemp /tmp/hashicorp-keyring.XXXXXX)"
-    trap 'rm -f "$key_tmp" "$keyring_tmp"' EXIT
-
-    wget -nv -O "$key_tmp" https://apt.releases.hashicorp.com/gpg
-    gpg --batch --yes --dearmor --output "$keyring_tmp" "$key_tmp"
-    sudo install -m 0644 "$keyring_tmp" "$keyring_path"
-
-    log_success "HashiCorp package-signing key added."
-else
-    log_info "HashiCorp package-signing key already present."
-fi
-
-if [ ! -f "$repo_list" ]; then
-    log_step "Adding HashiCorp's official APT repository..."
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=${keyring_path}] https://apt.releases.hashicorp.com ${ubuntu_codename} main" \
-        | sudo tee "$repo_list" > /dev/null
-    sudo apt-get update -qq
-
-    log_success "HashiCorp repository added."
-else
-    log_info "HashiCorp APT repository already configured."
 fi
 
 # =========================
