@@ -17,6 +17,8 @@ bash_aliases_file="$HOME/.bash_aliases"
 read -r -d '' alias_content <<'EOF' || true
 # Setup-Genie managed aliases
 alias gitadd='git add'
+alias gitapply='git apply'
+alias gitapplycheck='git apply --check'
 alias gitbranch='git branch'
 alias gitcheckout='git checkout'
 alias gitcommit='git commit -m'
