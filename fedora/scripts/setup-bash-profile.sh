@@ -22,6 +22,7 @@ alias gitapply='git apply'
 alias gitapplycheck='git apply --check'
 alias gitbranch='git branch'
 alias gitcheckout='git checkout'
+alias gitcleanupdate='git_clean_update'
 alias gitcommit='git commit -m'
 alias gitdiff='git diff'
 alias gitfetch='git fetch'
@@ -30,6 +31,14 @@ alias gitlog='git log'
 alias gitpull='git pull'
 alias gitpush='git push'
 alias gitstatus='git status'
+git_clean_update() {
+    git checkout main && git fetch origin --prune && git pull || return
+    local branch
+    while IFS= read -r branch; do
+        [[ "$branch" == main ]] && continue
+        git branch -D "$branch" || return
+    done < <(git for-each-ref --format='%(refname:short)' refs/heads)
+}
 # CNCF
 alias awscheckloginstatus='aws sts get-caller-identity'
 alias ghcheckloginstatus='gh auth status'
